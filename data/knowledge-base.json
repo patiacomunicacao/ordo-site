@@ -1,0 +1,115 @@
+{
+  "company": {
+    "name": "ORDO Consultoria",
+    "description": "Consultoria especializada em mapeamento de processos, automação e inteligência artificial para pequenas e médias empresas. Ajudamos PMEs a organizar sua operação, eliminar retrabalho e crescer com mais eficiência usando tecnologia acessível.",
+    "location": "Curitiba / São José dos Pinhais, PR",
+    "whatsapp": "15991930437",
+    "email": "ordooperacional@gmail.com"
+  },
+  "services": [
+    {
+      "id": "1",
+      "name": "Mapeamento de Processos",
+      "description": "Identificamos gargalos e oportunidades na operação atual da empresa.",
+      "startingPrice": "R$ 2.500",
+      "highlights": "Diagnóstico rápido, relatório executivo, priorização de melhorias"
+    },
+    {
+      "id": "2",
+      "name": "Automação de Processos",
+      "description": "Automatizamos tarefas repetitivas para liberar a equipe para o que importa.",
+      "startingPrice": "R$ 4.000",
+      "highlights": "Integrações entre sistemas, eliminação de retrabalho, ganho de produtividade"
+    },
+    {
+      "id": "3",
+      "name": "Implementação de IA",
+      "description": "Aplicamos inteligência artificial em pontos estratégicos do negócio.",
+      "startingPrice": "R$ 6.000",
+      "highlights": "Chatbots, análise de dados, predição, automação inteligente"
+    },
+    {
+      "id": "4",
+      "name": "Gestão de Projetos",
+      "description": "Acompanhamos projetos de ponta a ponta com metodologia ágil.",
+      "startingPrice": "R$ 3.000",
+      "highlights": "Cronograma realista, gestão de riscos, comunicação clara"
+    },
+    {
+      "id": "5",
+      "name": "Treinamento e Capacitação",
+      "description": "Capacitamos equipes para operar as novas soluções com autonomia.",
+      "startingPrice": "R$ 1.800",
+      "highlights": "Treinamentos práticos, material didático, suporte pós-treinamento"
+    },
+    {
+      "id": "6",
+      "name": "Transformação Digital",
+      "description": "Programa completo de modernização da operação da empresa.",
+      "startingPrice": "R$ 15.000",
+      "highlights": "Diagnóstico, roadmap, implementação e acompanhamento de resultados"
+    },
+    {
+      "id": "3eb7c4d4-896a-45f7-bcce-2f4052a64f2a",
+      "name": "Diagnóstico Operacional",
+      "description": "Levantamento completo dos processos da empresa: identificamos gargalos, retrabalhos e oportunidades de melhoria. ",
+      "startingPrice": "497",
+      "highlights": "Entregamos um relatório com prioridades claras e próximos passos. Ideal para quem quer entender onde está perdendo tempo e dinheiro antes de investir em automação."
+    },
+    {
+      "id": "2c8b71f0-0340-4be0-ac5d-04f6e6bdf5ad",
+      "name": "Implementação de ClickUp",
+      "description": "Estruturação completa do ClickUp como central de gestão da empresa: espaços, listas, fluxos de trabalho, automações nativas e treinamento da equipe.",
+      "startingPrice": "3500",
+      "highlights": "Destinado a empresas que precisam de organização e visibilidade das tarefas em um só lugar."
+    }
+  ],
+  "faqs": [
+    {
+      "id": "1",
+      "question": "A ORDO atende empresas de qualquer segmento?",
+      "answer": "Sim. Trabalhamos com PMEs de diversos setores: serviços, construção, saúde, educação, varejo, entre outros. O que importa é que a empresa tenha processos que precisam de organização ou automação."
+    },
+    {
+      "id": "2",
+      "question": "Preciso ter equipe técnica para contratar a ORDO?",
+      "answer": "Não. Nossos serviços são desenhados para que o cliente não precise saber programar ou ter uma equipe de TI. Cuidamos de toda a implementação e treinamos a equipe para usar as ferramentas no dia a dia."
+    },
+    {
+      "id": "3",
+      "question": "Qual é o prazo de entrega dos projetos?",
+      "answer": "Depende do escopo. Um diagnóstico operacional é entregue em 5 a 7 dias úteis. Uma implementação completa de ClickUp com automações pode levar de 2 a 4 semanas. O prazo é sempre combinado antes do início do projeto."
+    },
+    {
+      "id": "dbf5ffd7-33eb-49ae-90c5-4bdf96f1e6a5",
+      "question": "Como funciona o processo de contratação?",
+      "answer": "O processo tem três etapas: (1) conversa inicial pelo WhatsApp ou e-mail para entender o seu negócio; (2) proposta personalizada com escopo, prazo e valores; (3) início do projeto após aprovação e pagamento da primeira parcela."
+    },
+    {
+      "id": "169b9408-fbdc-425b-baf2-6ab6aebceeab",
+      "question": "A ORDO oferece suporte após a entrega?",
+      "answer": "Sim. Todos os projetos incluem um período de suporte pós-entrega para dúvidas e ajustes. Para empresas que precisam de acompanhamento contínuo, oferecemos também planos de manutenção mensal."
+    },
+    {
+      "id": "7720d054-2281-4d67-86ad-61b6eec63df3",
+      "question": "Vocês trabalham com empresas de fora de Curitiba?",
+      "answer": "Sim, atendemos de forma 100% remota. A maioria dos nossos clientes é atendida por videoconferência, e-mail e WhatsApp, sem necessidade de visitas presenciais."
+    },
+    {
+      "id": "3dff21f1-0452-49d0-9821-167acce1dae6",
+      "question": "Quais ferramentas vocês usam?",
+      "answer": "Trabalhamos principalmente com ClickUp (gestão de projetos e tarefas), Make.com e n8n (automações), além de plataformas de IA como Claude e OpenAI. Sempre recomendamos ferramentas compatíveis com o tamanho e o orçamento do cliente."
+    },
+    {
+      "id": "12de35ad-3f3f-4d36-ba67-91cfc6d10445",
+      "question": "Como sei qual serviço é o certo para minha empresa?",
+      "answer": "A melhor forma é agendar uma conversa sem compromisso. A gente entende o momento da sua empresa e indica o serviço mais adequado — sem empurrar nada que não faça sentido para o seu caso."
+    }
+  ],
+  "behavior": {
+    "tone": "direto Responde de forma clara e objetiva, sem rodeios. Vai direto ao ponto sem perder a simpatia. acessível Evita jargões técnicos desnecessários. Se precisar de termos técnicos, explica de forma simples. profissional Mantém postura consultiva — não é robótico, mas também não é excessivamente informal.",
+    "mainGoal": "Qualificar e agendar conversas com potenciais clientes. A IA deve entender a situação do visitante, apresentar o serviço mais adequado e incentivá-lo a entrar em contato pelo WhatsApp ou e-mail.",
+    "restrictions": "Não dar preços definitivos sem falar primeiro que variam conforme o escopo — sempre indicar \"a partir de\".\nNão prometer prazos fixos de entrega sem ressalvar que dependem do escopo do projeto.\nNão responder sobre assuntos não relacionados à ORDO, consultoria, automação ou gestão de processos.\nNão fechar contratos ou aceitar pagamentos — sempre encaminhar para contato humano.",
+    "customInstructions": "Quando o visitante demonstrar interesse em algum serviço, perguntar brevemente sobre o negócio dele (segmento e tamanho da equipe) antes de indicar a solução — isso cria uma experiência mais consultiva.\n\nSe o visitante estiver com dúvida entre dois serviços, ajudá-lo a escolher com base na situação dele, sem empurrar o mais caro.\n\nEncerrar sempre oferecendo o próximo passo: \"Posso te conectar com a Camila para uma conversa sem compromisso. Prefere WhatsApp ou e-mail?\""
+  }
+}
