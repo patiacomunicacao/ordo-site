@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { getSiteConfig } from "@/lib/site-config";
 
 function LinkedInIcon() {
   return (
@@ -25,7 +26,8 @@ const quickLinks = [
   { href: "#contato", label: "Contato" },
 ];
 
-export default function Footer() {
+export default async function Footer() {
+  const cfg = await getSiteConfig();
   return (
     <footer className="text-white" style={{ backgroundColor: "#26215C" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
@@ -51,24 +53,16 @@ export default function Footer() {
 
             {/* Social */}
             <div className="flex gap-3 mt-6">
-              <a
-                href="https://linkedin.com/company/ordo-consultoria"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn da ORDO"
-                className="flex items-center justify-center w-9 h-9 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors"
-              >
-                <LinkedInIcon />
-              </a>
-              <a
-                href="https://instagram.com/ordoconsultoria"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram da ORDO"
-                className="flex items-center justify-center w-9 h-9 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors"
-              >
-                <InstagramIcon />
-              </a>
+              {cfg.linkedin && (
+                <a href={cfg.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn da ORDO" className="flex items-center justify-center w-9 h-9 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors">
+                  <LinkedInIcon />
+                </a>
+              )}
+              {cfg.instagram && (
+                <a href={cfg.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram da ORDO" className="flex items-center justify-center w-9 h-9 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors">
+                  <InstagramIcon />
+                </a>
+              )}
             </div>
           </div>
 
@@ -99,29 +93,19 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5">
                 <Mail size={15} className="text-purple-400 mt-0.5 flex-shrink-0" />
-                <a
-                  href="mailto:contato@ordoconsultoria.com.br"
-                  className="text-sm text-purple-200 hover:text-white transition-colors break-all"
-                >
-                  contato@ordoconsultoria.com.br
+                <a href={`mailto:${cfg.email}`} className="text-sm text-purple-200 hover:text-white transition-colors break-all">
+                  {cfg.email}
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <Phone size={15} className="text-purple-400 mt-0.5 flex-shrink-0" />
-                <a
-                  href="https://wa.me/5541999990000"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-purple-200 hover:text-white transition-colors"
-                >
-                  (41) 99999-0000
+                <a href={`https://wa.me/${cfg.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-sm text-purple-200 hover:text-white transition-colors">
+                  {cfg.phone}
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPin size={15} className="text-purple-400 mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-purple-200">
-                  São José dos Pinhais, PR
-                </span>
+                <span className="text-sm text-purple-200">{cfg.addressFull}</span>
               </li>
             </ul>
           </div>
@@ -130,7 +114,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-purple-400">
           <p>© {new Date().getFullYear()} ORDO Consultoria. Todos os direitos reservados.</p>
-          <p>São José dos Pinhais · Curitiba e região</p>
+          <p>{cfg.addressFull}</p>
         </div>
       </div>
     </footer>

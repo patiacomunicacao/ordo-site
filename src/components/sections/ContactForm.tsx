@@ -19,39 +19,31 @@ import { ContactSchema, type ContactFormData } from "@/lib/validations";
 import { SERVICES } from "@/data/services";
 import { cn } from "@/lib/utils";
 
-const CONTACT_INFO = [
-  {
-    icon: Mail,
-    label: "E-mail",
-    value: "contato@ordoconsultoria.com.br",
-    href: "mailto:contato@ordoconsultoria.com.br",
-  },
-  {
-    icon: Phone,
-    label: "WhatsApp",
-    value: "(41) 99999-0000",
-    href: "https://wa.me/5541999990000",
-  },
-  {
-    icon: MapPin,
-    label: "Localização",
-    value: "São José dos Pinhais / PR",
-    href: null,
-  },
-  {
-    icon: Clock,
-    label: "Horário",
-    value: "Seg–Sex, 8h às 18h",
-    href: null,
-  },
-];
+import type { SiteConfig } from "@/lib/site-config";
+
+function buildContactInfo(cfg?: SiteConfig) {
+  const c = cfg ?? {
+    email: "contato@ordoconsultoria.com.br",
+    phone: "(41) 99999-0000",
+    whatsapp: "5541999990000",
+    address: "São José dos Pinhais / PR",
+    businessHours: "Seg–Sex, 8h às 18h",
+  };
+  return [
+    { icon: Mail,  label: "E-mail",      value: c.email,         href: `mailto:${c.email}` },
+    { icon: Phone, label: "WhatsApp",    value: c.phone,         href: `https://wa.me/${c.whatsapp}` },
+    { icon: MapPin,label: "Localização", value: c.address,       href: null },
+    { icon: Clock, label: "Horário",     value: c.businessHours, href: null },
+  ];
+}
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return <p className="text-xs text-red-500 mt-1">{message}</p>;
 }
 
-export default function ContactForm() {
+export default function ContactForm({ siteConfig }: { siteConfig?: SiteConfig }) {
+  const CONTACT_INFO = buildContactInfo(siteConfig);
   const [submitted, setSubmitted] = useState(false);
 
   const {
