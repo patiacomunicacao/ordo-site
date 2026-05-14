@@ -1,7 +1,4 @@
-import fs from "fs";
-import path from "path";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { sql } from "@/lib/neon";
 
 export type LeadTemperature = "hot" | "warm" | "cold";
 
@@ -19,38 +16,89 @@ export interface Lead {
   webhookSentAt?: string;
 }
 
-// ─── Persistence ──────────────────────────────────────────────────────────────
+// ─── Schema ───────────────────────────────────────────────────────────────────
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const LEADS_FILE = path.join(DATA_DIR, "leads.json");
+let schemaReady = false;
 
-function ensureDir() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+async function ensureSchema() {
+  if (schemaReady) return;
+  await sql`
+    CREATE TABLE IF NOT EXISTS leads (
+      id               UUID PRIMARY KEY,
+      name             TEXT NOT NULL,
+      phone            TEXT,
+      email            TEXT,
+      summary          TEXT NOT NULL DEFAULT '',
+      temperature      TEXT NOT NULL DEFAULT 'warm',
+      service_interest TEXT,
+      messages         JSONB NOT NULL DEFAULT '[]',
+      created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      webhook_sent     BOOLEAN NOT NULL DEFAULT FALSE,
+      webhook_sent_at  TIMESTAMPTZ
+    )
+  `;
+  schemaReady = true;
 }
 
-export function getLeads(): Lead[] {
-  ensureDir();
-  if (!fs.existsSync(LEADS_FILE)) return [];
-  try {
-    return JSON.parse(fs.readFileSync(LEADS_FILE, "utf-8")) as Lead[];
-  } catch {
-    return [];
-  }
+// ─── Row mapper ───────────────────────────────────────────────────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function rowToLead(r: any): Lead {
+  return {
+    id: r.id,
+    name: r.name,
+    phone: r.phone ?? undefined,
+    email: r.email ?? undefined,
+    summary: r.summary,
+    temperature: r.temperature as LeadTemperature,
+    serviceInterest: r.service_interest ?? undefined,
+    messages: r.messages as Lead["messages"],
+    createdAt: new Date(r.created_at).toISOString(),
+    webhookSent: r.webhook_sent,
+    webhookSentAt: r.webhook_sent_at
+      ? new Date(r.webhook_sent_at).toISOString()
+      : undefined,
+  };
 }
 
-export function saveLead(lead: Lead): void {
-  ensureDir();
-  const leads = getLeads();
-  const idx = leads.findIndex((l) => l.id === lead.id);
-  if (idx >= 0) leads[idx] = lead;
-  else leads.unshift(lead);
-  fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), "utf-8");
+// ─── Reads ────────────────────────────────────────────────────────────────────
+
+export async function getLeads(): Promise<Lead[]> {
+  await ensureSchema();
+  const rows = await sql`SELECT * FROM leads ORDER BY created_at DESC`;
+  return rows.map(rowToLead);
 }
 
-export function deleteLead(id: string): void {
-  const leads = getLeads().filter((l) => l.id !== id);
-  ensureDir();
-  fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2), "utf-8");
+// ─── Writes ───────────────────────────────────────────────────────────────────
+
+export async function saveLead(lead: Lead): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO leads (
+      id, name, phone, email, summary, temperature,
+      service_interest, messages, created_at, webhook_sent, webhook_sent_at
+    ) VALUES (
+      ${lead.id}, ${lead.name}, ${lead.phone ?? null}, ${lead.email ?? null},
+      ${lead.summary}, ${lead.temperature}, ${lead.serviceInterest ?? null},
+      ${JSON.stringify(lead.messages)}, ${lead.createdAt},
+      ${lead.webhookSent}, ${lead.webhookSentAt ?? null}
+    )
+    ON CONFLICT (id) DO UPDATE SET
+      name             = EXCLUDED.name,
+      phone            = EXCLUDED.phone,
+      email            = EXCLUDED.email,
+      summary          = EXCLUDED.summary,
+      temperature      = EXCLUDED.temperature,
+      service_interest = EXCLUDED.service_interest,
+      messages         = EXCLUDED.messages,
+      webhook_sent     = EXCLUDED.webhook_sent,
+      webhook_sent_at  = EXCLUDED.webhook_sent_at
+  `;
+}
+
+export async function deleteLead(id: string): Promise<void> {
+  await ensureSchema();
+  await sql`DELETE FROM leads WHERE id = ${id}`;
 }
 
 // ─── Webhook ──────────────────────────────────────────────────────────────────

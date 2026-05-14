@@ -11,7 +11,7 @@ export async function GET(
   { params }: Ctx
 ): Promise<NextResponse> {
   const { id } = await params;
-  const post = getPostById(id);
+  const post = await getPostById(id);
   if (!post) return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
   return NextResponse.json(post);
 }
@@ -22,7 +22,7 @@ export async function PUT(
 ): Promise<NextResponse> {
   const { id } = await params;
   const data = (await req.json()) as Partial<Omit<DbPost, "id" | "createdAt">>;
-  const post = updatePost(id, data);
+  const post = await updatePost(id, data);
   if (!post) return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
   return NextResponse.json(post);
 }
@@ -32,7 +32,7 @@ export async function DELETE(
   { params }: Ctx
 ): Promise<NextResponse> {
   const { id } = await params;
-  const ok = deletePost(id);
+  const ok = await deletePost(id);
   if (!ok) return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
   return NextResponse.json({ success: true });
 }

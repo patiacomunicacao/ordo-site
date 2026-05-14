@@ -5,11 +5,11 @@ import type { KnowledgeBase } from "@/lib/knowledge";
 export const runtime = "nodejs";
 
 export async function GET(): Promise<NextResponse> {
-  return NextResponse.json(getKnowledgeBase());
+  return NextResponse.json(await getKnowledgeBase());
 }
 
 export async function PUT(req: NextRequest): Promise<NextResponse> {
   const data = (await req.json()) as KnowledgeBase;
-  saveKnowledgeBase(data);
+  await saveKnowledgeBase(data);
   return NextResponse.json({ success: true });
 }

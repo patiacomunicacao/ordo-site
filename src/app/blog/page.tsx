@@ -86,7 +86,7 @@ interface Props {
 
 export default async function BlogPage({ searchParams }: Props) {
   const { tag } = await searchParams;
-  const allPosts = getBlogPosts();
+  const allPosts = await getBlogPosts();
   const posts =
     !tag || tag === "Todos"
       ? allPosts

@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import { sql } from "@/lib/neon";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -38,10 +37,7 @@ export interface KnowledgeBase {
   };
 }
 
-// ─── Persistence ──────────────────────────────────────────────────────────────
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const KB_FILE = path.join(DATA_DIR, "knowledge-base.json");
+// ─── Default knowledge base ───────────────────────────────────────────────────
 
 const DEFAULT_KB: KnowledgeBase = {
   company: {
@@ -137,26 +133,39 @@ const DEFAULT_KB: KnowledgeBase = {
   },
 };
 
-function ensureDir() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+// ─── Schema ───────────────────────────────────────────────────────────────────
+
+let schemaReady = false;
+
+async function ensureSchema() {
+  if (schemaReady) return;
+  await sql`
+    CREATE TABLE IF NOT EXISTS knowledge_base (
+      id   INTEGER PRIMARY KEY DEFAULT 1,
+      data JSONB NOT NULL
+    )
+  `;
+  // Seed default if empty
+  await sql`
+    INSERT INTO knowledge_base (id, data)
+    VALUES (1, ${JSON.stringify(DEFAULT_KB)})
+    ON CONFLICT (id) DO NOTHING
+  `;
+  schemaReady = true;
 }
 
-export function getKnowledgeBase(): KnowledgeBase {
-  ensureDir();
-  if (!fs.existsSync(KB_FILE)) {
-    fs.writeFileSync(KB_FILE, JSON.stringify(DEFAULT_KB, null, 2), "utf-8");
-    return DEFAULT_KB;
-  }
-  try {
-    return JSON.parse(fs.readFileSync(KB_FILE, "utf-8")) as KnowledgeBase;
-  } catch {
-    return DEFAULT_KB;
-  }
+export async function getKnowledgeBase(): Promise<KnowledgeBase> {
+  await ensureSchema();
+  const rows = await sql`SELECT data FROM knowledge_base WHERE id = 1`;
+  return (rows[0]?.data as KnowledgeBase) ?? DEFAULT_KB;
 }
 
-export function saveKnowledgeBase(kb: KnowledgeBase): void {
-  ensureDir();
-  fs.writeFileSync(KB_FILE, JSON.stringify(kb, null, 2), "utf-8");
+export async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {
+  await ensureSchema();
+  await sql`
+    INSERT INTO knowledge_base (id, data) VALUES (1, ${JSON.stringify(kb)})
+    ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data
+  `;
 }
 
 // ─── Prompt builder ───────────────────────────────────────────────────────────

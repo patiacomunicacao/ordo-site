@@ -106,7 +106,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const kb = getKnowledgeBase();
+  const kb = await getKnowledgeBase();
   const systemPrompt = buildSystemPrompt(kb);
   const anthropic = new Anthropic({ apiKey });
 
@@ -163,7 +163,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       createdAt: new Date().toISOString(),
       webhookSent: false,
     };
-    saveLead(lead);
+    await saveLead(lead);
 
     // Send to webhook if configured
     const webhookUrl = kb.integrations?.clickupWebhookUrl?.trim();
@@ -172,7 +172,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       if (sent) {
         lead.webhookSent = true;
         lead.webhookSentAt = new Date().toISOString();
-        saveLead(lead);
+        await saveLead(lead);
       }
     }
 

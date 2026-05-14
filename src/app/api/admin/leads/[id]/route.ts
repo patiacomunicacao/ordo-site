@@ -9,7 +9,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  deleteLead(id);
+  await deleteLead(id);
   return NextResponse.json({ ok: true });
 }
 
@@ -19,14 +19,14 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const leads = getLeads();
+  const leads = await getLeads();
   const lead = leads.find((l) => l.id === id);
 
   if (!lead) {
     return NextResponse.json({ error: "Lead não encontrado" }, { status: 404 });
   }
 
-  const kb = getKnowledgeBase();
+  const kb = await getKnowledgeBase();
   const webhookUrl = kb.integrations?.clickupWebhookUrl?.trim();
 
   if (!webhookUrl) {
@@ -40,7 +40,7 @@ export async function POST(
   if (sent) {
     lead.webhookSent = true;
     lead.webhookSentAt = new Date().toISOString();
-    saveLead(lead);
+    await saveLead(lead);
     return NextResponse.json({ ok: true });
   }
 

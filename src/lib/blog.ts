@@ -25,15 +25,15 @@ function toPost(p: DbPost): BlogPost {
   };
 }
 
-export function getBlogPosts(): BlogPost[] {
-  return getPublishedPosts().map(toPost);
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  return (await getPublishedPosts()).map(toPost);
 }
 
-export function getPostBySlug(slug: string): BlogPost | undefined {
-  const p = dbGetPostBySlug(slug);
+export async function getPostBySlug(slug: string): Promise<BlogPost | undefined> {
+  const p = await dbGetPostBySlug(slug);
   return p ? toPost(p) : undefined;
 }
 
-export function getRelatedPosts(slug: string): BlogPost[] {
-  return dbGetRelatedPosts(slug).map(toPost);
+export async function getRelatedPosts(slug: string): Promise<BlogPost[]> {
+  return (await dbGetRelatedPosts(slug)).map(toPost);
 }

@@ -1,9 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Serve locally uploaded images via next/image
   images: {
-    remotePatterns: [],
+    remotePatterns: [
+      // Vercel Blob storage (imagens do admin)
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
+    ],
   },
 };
 
