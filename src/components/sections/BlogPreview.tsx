@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock } from "lucide-react";
-import { BLOG_POSTS } from "@/data/blog-posts";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BlogPost } from "@/types";
@@ -11,52 +10,49 @@ import type { BlogPost } from "@/types";
 const TAG_COLORS: Record<string, { bg: string; text: string; accent: string }> = {
   Processos: { bg: "#4F3DB5", text: "#4F3DB5", accent: "#EEEDFE" },
   Automação: { bg: "#AFA9EC", text: "#3C3489", accent: "#EEEDFE" },
-  IA: { bg: "#3C3489", text: "#3C3489", accent: "#EEEDFE" },
+  IA:        { bg: "#3C3489", text: "#3C3489", accent: "#EEEDFE" },
 };
 
-function PostPlaceholderImage({ tag }: { tag: string }) {
+function PlaceholderImage({ tag }: { tag: string }) {
   const color = TAG_COLORS[tag]?.bg ?? "#4F3DB5";
   return (
-    <svg
-      viewBox="0 0 400 200"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
       <rect width="400" height="200" fill={color} opacity="0.12" />
       <circle cx="80" cy="60" r="55" fill={color} opacity="0.15" />
       <circle cx="320" cy="150" r="70" fill={color} opacity="0.12" />
       <rect x="140" y="30" width="120" height="4" rx="2" fill={color} opacity="0.2" />
       <rect x="100" y="50" width="200" height="4" rx="2" fill={color} opacity="0.15" />
-      <rect x="160" y="70" width="80" height="4" rx="2" fill={color} opacity="0.1" />
-      <polygon points="180,100 220,140 140,140" fill={color} opacity="0.08" />
     </svg>
   );
 }
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
+    day: "2-digit", month: "short", year: "numeric",
   });
 }
 
 function BlogCard({ post }: { post: BlogPost }) {
   const tagStyle = TAG_COLORS[post.tag] ?? TAG_COLORS["Processos"];
-
   return (
     <Link
       href={`/blog/${post.slug}`}
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-[#AFA9EC] transition-all duration-300"
     >
-      {/* Image placeholder */}
       <div className="h-44 overflow-hidden bg-gray-50">
-        <PostPlaceholderImage tag={post.tag} />
+        {post.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={post.coverImage}
+            alt={post.coverAlt ?? post.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : (
+          <PlaceholderImage tag={post.tag} />
+        )}
       </div>
 
       <div className="flex flex-col flex-1 p-6">
-        {/* Tag */}
         <span
           className="self-start text-[0.65rem] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3"
           style={{ backgroundColor: tagStyle.accent, color: tagStyle.text }}
@@ -87,8 +83,8 @@ function BlogCard({ post }: { post: BlogPost }) {
   );
 }
 
-export default function BlogPreview() {
-  const posts = BLOG_POSTS.slice(0, 3);
+export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
+  if (posts.length === 0) return null;
 
   return (
     <section id="blog" className="py-24 bg-white">
@@ -101,10 +97,7 @@ export default function BlogPreview() {
           transition={{ duration: 0.55 }}
         >
           <div>
-            <span
-              className="text-xs font-bold uppercase tracking-widest"
-              style={{ color: "#4F3DB5" }}
-            >
+            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#4F3DB5" }}>
               Conteúdo
             </span>
             <h2

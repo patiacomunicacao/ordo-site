@@ -18,12 +18,12 @@ export interface SiteConfig {
 // ─── Default ──────────────────────────────────────────────────────────────────
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
-  email: "contato@ordoconsultoria.com.br",
-  phone: "(41) 99999-0000",
-  whatsapp: "5541999990000",
+  email: "ordooperacional@gmail.com",
+  phone: "+55 (15) 99193-0437",
+  whatsapp: "5515991930437",
   address: "São José dos Pinhais / PR",
   addressFull: "São José dos Pinhais · Curitiba e região",
-  businessHours: "Seg–Sex, 8h às 18h",
+  businessHours: "Seg–Sex, 9h às 18h",
   linkedin: "https://linkedin.com/company/ordo-consultoria",
   instagram: "https://instagram.com/ordoconsultoria",
 };
@@ -43,7 +43,10 @@ async function ensureSchema() {
   await sql`
     INSERT INTO site_config (id, data)
     VALUES (1, ${JSON.stringify(DEFAULT_SITE_CONFIG)})
-    ON CONFLICT (id) DO NOTHING
+    ON CONFLICT (id) DO UPDATE
+      SET data = EXCLUDED.data
+      WHERE site_config.data->>'email' = 'contato@ordoconsultoria.com.br'
+         OR site_config.data->>'phone' = '(41) 99999-0000'
   `;
   schemaReady = true;
 }
