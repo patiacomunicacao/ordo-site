@@ -4,7 +4,7 @@ import { Clock } from "lucide-react";
 import { getBlogPosts } from "@/lib/blog";
 import type { BlogPost } from "@/types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Blog",

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("pt-BR", {

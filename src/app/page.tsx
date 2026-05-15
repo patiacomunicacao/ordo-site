@@ -1,5 +1,6 @@
 // Home page — importa e compõe todas as seções da landing page
-export const dynamic = "force-dynamic";
+// ISR: página cacheada, revalidada pelo admin ao salvar ou a cada 5 min no máximo
+export const revalidate = 300;
 
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
