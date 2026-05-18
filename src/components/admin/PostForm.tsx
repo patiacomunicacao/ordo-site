@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import { ArrowLeft, Save, Globe, ChevronDown, ChevronUp, Eye, X, Clock, Tag } from "lucide-react";
+import { ArrowLeft, Save, Globe, ChevronDown, ChevronUp, Eye, X, Clock, Tag, CheckCircle, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import ImageUpload from "@/components/admin/ImageUpload";
 import type { DbPost } from "@/lib/db";
@@ -353,6 +353,37 @@ function defaultState(): FormState {
   };
 }
 
+type AutoSaveStatus = "idle" | "pending" | "saving" | "saved" | "error";
+
+function AutoSaveIndicator({ status, savedAt }: { status: AutoSaveStatus; savedAt: Date | null }) {
+  if (status === "idle") return null;
+  return (
+    <span className="hidden sm:flex items-center gap-1.5 text-xs">
+      {status === "pending" && <span className="text-gray-400">Alterações não salvas…</span>}
+      {status === "saving" && (
+        <>
+          <Loader2 size={12} className="animate-spin text-gray-400" />
+          <span className="text-gray-400">Salvando rascunho…</span>
+        </>
+      )}
+      {status === "saved" && (
+        <>
+          <CheckCircle size={12} className="text-emerald-500" />
+          <span className="text-emerald-600">
+            Salvo automaticamente{savedAt ? ` às ${savedAt.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` : ""}
+          </span>
+        </>
+      )}
+      {status === "error" && (
+        <>
+          <AlertCircle size={12} className="text-amber-500" />
+          <span className="text-amber-600">Falha no auto-save</span>
+        </>
+      )}
+    </span>
+  );
+}
+
 export default function PostForm({ post }: { post?: DbPost }) {
   const isEdit = !!post;
   const router = useRouter();
@@ -360,6 +391,13 @@ export default function PostForm({ post }: { post?: DbPost }) {
   const [error, setError] = useState("");
   const [slugEdited, setSlugEdited] = useState(isEdit);
   const [showPreview, setShowPreview] = useState(false);
+
+  // Auto-save state
+  const [autoSaveStatus, setAutoSaveStatus] = useState<AutoSaveStatus>("idle");
+  const [autoSavedAt, setAutoSavedAt] = useState<Date | null>(null);
+  const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savedPostId = useRef<string | null>(post?.id ?? null); // tracks ID after first save of a new post
+  const isFirstRender = useRef(true);
 
   const [form, setForm] = useState<FormState>(() => {
     if (!post) return defaultState();
@@ -386,6 +424,59 @@ export default function PostForm({ post }: { post?: DbPost }) {
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
+
+  // ── Auto-save logic ──────────────────────────────────────────────────────────
+  const performAutoSave = useCallback(async (currentForm: FormState) => {
+    // Need at least a title to save
+    if (!currentForm.title.trim() || !currentForm.slug.trim()) return;
+
+    setAutoSaveStatus("saving");
+    try {
+      const payload = {
+        ...currentForm,
+        status: "draft" as const, // auto-save always saves as draft
+        publishedAt: currentForm.publishedAt || null,
+      };
+
+      const id = savedPostId.current;
+      const url = id ? `/api/admin/posts/${id}` : "/api/admin/posts";
+      const method = id ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        const saved = (await res.json()) as { id: string };
+        if (!savedPostId.current) savedPostId.current = saved.id; // store ID for new posts
+        setAutoSaveStatus("saved");
+        setAutoSavedAt(new Date());
+      } else {
+        setAutoSaveStatus("error");
+      }
+    } catch {
+      setAutoSaveStatus("error");
+    }
+  }, []);
+
+  // Trigger auto-save 3s after any form change (skip on first render)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setAutoSaveStatus("pending");
+    if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    autoSaveTimer.current = setTimeout(() => {
+      void performAutoSave(form);
+    }, 3000);
+    return () => {
+      if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form]);
 
   // Auto-generate slug from title
   function handleTitleChange(value: string) {
@@ -483,6 +574,7 @@ export default function PostForm({ post }: { post?: DbPost }) {
 
           <div className="flex items-center gap-2 flex-shrink-0">
             {error && <p className="text-xs text-red-600 hidden sm:block">{error}</p>}
+            <AutoSaveIndicator status={autoSaveStatus} savedAt={autoSavedAt} />
             <button
               type="button"
               onClick={() => setShowPreview(true)}
