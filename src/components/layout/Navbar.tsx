@@ -20,7 +20,7 @@ function OrdoLogo({ className, white = false }: { className?: string; white?: bo
     <Link href="/" className={cn("flex items-center select-none", className)}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={white ? "/images/logo-ordo-V1-branco.png" : "/images/logo-ordo-color.png"}
+        src={white ? "/images/logo-ordo-branco.png" : "/images/logo-ordo-color.png"}
         alt="ORDO Consultoria"
         className="h-[70px] w-auto"
       />

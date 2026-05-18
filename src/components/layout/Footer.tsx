@@ -38,7 +38,7 @@ export default async function Footer() {
               <Link href="/">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/logo-ordo-V1-branco.png"
+                  src="/images/logo-ordo-branco.png"
                   alt="ORDO Consultoria"
                   className="h-12 w-auto"
                 />
