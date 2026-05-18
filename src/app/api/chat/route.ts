@@ -46,22 +46,27 @@ async function analyzeConversation(
   try {
     const res = await anthropic.messages.create({
       model: "claude-haiku-4-5",
-      max_tokens: 300,
+      max_tokens: 800,
       system:
-        'Você analisa conversas de pré-venda e retorna APENAS um objeto JSON válido, sem markdown, sem explicações.',
+        'Você analisa conversas de pré-venda e retorna APENAS um objeto JSON válido, sem markdown, sem explicações. O campo "summary" deve ser uma string completa, nunca truncada.',
       messages: [
         {
           role: "user",
           content: `Analise a conversa abaixo e retorne um JSON com exatamente estas três chaves:
-- "summary": string com 2-3 frases descrevendo o perfil do lead e o que ele busca
-- "temperature": uma das opções "hot" (pronto para contratar), "warm" (interessado, precisa de nurturing) ou "cold" (apenas curioso)
-- "serviceInterest": string curta com o serviço de maior interesse (ou "Geral" se não identificado)
+- "summary": 2 a 3 frases COMPLETAS descrevendo o perfil do lead, sua empresa/segmento e o que ele busca
+- "temperature": exatamente uma das opções: "hot" (pronto para contratar), "warm" (interessado, precisa de nurturing) ou "cold" (apenas curioso)
+- "serviceInterest": nome curto do serviço de maior interesse (ou "Geral" se não identificado)
 
 Conversa:
 ${conversationText}`,
         },
       ],
     });
+
+    // Verify the response was not cut off
+    if (res.stop_reason !== "end_turn") {
+      console.warn("[analyzeConversation] Response may be incomplete, stop_reason:", res.stop_reason);
+    }
 
     const text = res.content[0]?.type === "text" ? res.content[0].text.trim() : "{}";
     // Remove possible markdown code fences
