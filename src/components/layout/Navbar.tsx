@@ -72,6 +72,17 @@ export default function Navbar() {
               </a>
             ))}
             <Link
+              href="/casos"
+              className={cn(
+                "text-sm font-medium transition-colors duration-150",
+                pathname.startsWith("/casos")
+                  ? "text-[#4F3DB5] font-semibold"
+                  : "text-gray-600 hover:text-[#4F3DB5]"
+              )}
+            >
+              Cases
+            </Link>
+            <Link
               href="/blog"
               className={cn(
                 "text-sm font-medium transition-colors duration-150",
@@ -120,6 +131,18 @@ export default function Navbar() {
                       {s.label}
                     </a>
                   ))}
+                  <Link
+                    href="/casos"
+                    className={cn(
+                      "text-sm font-medium py-3.5 border-b border-gray-100 transition-colors",
+                      pathname.startsWith("/casos")
+                        ? "text-[#4F3DB5] font-semibold"
+                        : "text-gray-700 hover:text-[#4F3DB5]"
+                    )}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Cases
+                  </Link>
                   <Link
                     href="/blog"
                     className={cn(

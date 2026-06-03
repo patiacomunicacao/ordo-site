@@ -25,8 +25,10 @@ import {
   Undo2,
   Redo2,
   Pilcrow,
+  FileCode,
+  X,
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 // ─── Toolbar button ───────────────────────────────────────────────────────────
 
@@ -79,9 +81,11 @@ function Sep() {
 function Toolbar({
   editor,
   onImageInsert,
+  onHtmlInsert,
 }: {
   editor: Editor;
   onImageInsert: () => void;
+  onHtmlInsert: () => void;
 }) {
   // useEditorState ensures the toolbar re-renders whenever marks/nodes change
   const state = useEditorState({
@@ -214,6 +218,73 @@ function Toolbar({
       <Btn onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Linha divisória">
         <Minus size={15} />
       </Btn>
+
+      <Sep />
+
+      {/* Raw HTML insert */}
+      <Btn onClick={onHtmlInsert} title="Inserir HTML bruto">
+        <FileCode size={15} />
+      </Btn>
+    </div>
+  );
+}
+
+// ─── Main editor ──────────────────────────────────────────────────────────────
+
+// ─── HTML insert modal ────────────────────────────────────────────────────────
+
+function HtmlInsertModal({
+  onInsert,
+  onClose,
+}: {
+  onInsert: (html: string) => void;
+  onClose: () => void;
+}) {
+  const [raw, setRaw] = useState("");
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Inserir HTML</p>
+            <p className="text-xs text-gray-400 mt-0.5">Cole o código HTML — será inserido no conteúdo do post</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg transition-colors"
+          >
+            <X size={16} />
+          </button>
+        </div>
+        <div className="p-5">
+          <textarea
+            value={raw}
+            onChange={(e) => setRaw(e.target.value)}
+            placeholder="<h2>Título</h2><p>Parágrafo...</p>"
+            className="w-full h-48 px-3 py-2 border border-gray-200 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] resize-none"
+            autoFocus
+          />
+        </div>
+        <div className="flex justify-end gap-2 px-5 pb-5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={() => { if (raw.trim()) { onInsert(raw.trim()); onClose(); } }}
+            disabled={!raw.trim()}
+            className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#4F3DB5" }}
+          >
+            Inserir
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -228,6 +299,7 @@ export default function RichEditor({
   onChange: (html: string) => void;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showHtmlModal, setShowHtmlModal] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -265,7 +337,17 @@ export default function RichEditor({
 
   return (
     <div className="border border-gray-200 rounded-xl overflow-hidden bg-white">
-      <Toolbar editor={editor} onImageInsert={() => fileInputRef.current?.click()} />
+      {showHtmlModal && (
+        <HtmlInsertModal
+          onInsert={(html) => editor.chain().focus().insertContent(html).run()}
+          onClose={() => setShowHtmlModal(false)}
+        />
+      )}
+      <Toolbar
+        editor={editor}
+        onImageInsert={() => fileInputRef.current?.click()}
+        onHtmlInsert={() => setShowHtmlModal(true)}
+      />
       <EditorContent editor={editor} />
       <input
         ref={fileInputRef}
