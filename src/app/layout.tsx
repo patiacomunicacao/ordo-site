@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Outfit, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import PublicShell from "@/components/layout/PublicShell";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const outfit = Outfit({
   variable: "--font-heading",
@@ -63,6 +66,9 @@ export const metadata: Metadata = {
   },
 };
 
+// Microsoft Clarity project ID — set NEXT_PUBLIC_CLARITY_ID in Vercel env vars
+const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,6 +78,23 @@ export default function RootLayout({
     <html lang="pt-BR" className={`${outfit.variable} ${dmSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <PublicShell>{children}</PublicShell>
+
+        {/* Vercel Analytics — page views, unique visitors, countries */}
+        <Analytics />
+
+        {/* Vercel Speed Insights — Core Web Vitals / performance */}
+        <SpeedInsights />
+
+        {/* Microsoft Clarity — heatmaps, session recordings */}
+        {CLARITY_ID && (
+          <Script id="ms-clarity" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window,document,"clarity","script","${CLARITY_ID}");`}
+          </Script>
+        )}
       </body>
     </html>
   );

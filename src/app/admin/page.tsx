@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PenSquare, Trash2, Plus, ExternalLink, LogOut, Bot, Users, Settings } from "lucide-react";
+import { PenSquare, Trash2, Plus, ExternalLink, LogOut, Bot, Users, Settings, BarChart3 } from "lucide-react";
 import type { DbPost } from "@/lib/db";
 
 function formatDate(iso: string | null) {
@@ -94,6 +94,13 @@ export default function AdminDashboard() {
           >
             <Users size={14} />
             Leads
+          </Link>
+          <Link
+            href="/admin/analytics"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            <BarChart3 size={14} />
+            Analytics
           </Link>
           <Link
             href="/admin/ia"
