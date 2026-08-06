@@ -111,7 +111,13 @@ export default async function Footer() {
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-purple-400">
           <p>© {new Date().getFullYear()} ORDO Consultoria. {t("copyright")}</p>
-          <p>{cfg.addressFull}</p>
+          <div className="flex items-center gap-4">
+            <Link href="/politica-de-privacidade" className="hover:text-white transition-colors">
+              Política de Privacidade
+            </Link>
+            <span className="opacity-30">·</span>
+            <p>{cfg.addressFull}</p>
+          </div>
         </div>
       </div>
     </footer>

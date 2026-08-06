@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit, DM_Sans } from "next/font/google";
-import Script from "next/script";
 import "../globals.css";
 import PublicShell from "@/components/layout/PublicShell";
+import CookieBanner from "@/components/layout/CookieBanner";
+import ConsentScripts from "@/components/layout/ConsentScripts";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NextIntlClientProvider } from "next-intl";
@@ -115,15 +116,8 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
-        {CLARITY_ID && (
-          <Script id="ms-clarity" strategy="afterInteractive">
-            {`(function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window,document,"clarity","script","${CLARITY_ID}");`}
-          </Script>
-        )}
+        <ConsentScripts clarityId={CLARITY_ID} />
+        <CookieBanner locale={locale} />
       </body>
     </html>
   );
