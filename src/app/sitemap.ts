@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getBlogPosts } from "@/lib/blog";
 
-const BASE = "https://ordoconsultoria.com.br";
+const BASE = "https://ordoautomacao.com.br";
 
 export const revalidate = 3600; // regenera a cada hora
 

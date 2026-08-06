@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://ordoconsultoria.com.br/sitemap.xml",
+    sitemap: "https://ordoautomacao.com.br/sitemap.xml",
   };
 }

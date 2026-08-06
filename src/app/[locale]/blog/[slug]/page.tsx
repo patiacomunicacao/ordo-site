@@ -14,7 +14,7 @@ export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
 }
 
-const BASE = "https://ordoconsultoria.com.br";
+const BASE = "https://ordoautomacao.com.br";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;

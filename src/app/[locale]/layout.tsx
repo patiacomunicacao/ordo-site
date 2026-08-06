@@ -22,7 +22,7 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const BASE = "https://ordoconsultoria.com.br";
+const BASE = "https://ordoautomacao.com.br";
 
 export async function generateMetadata({
   params,

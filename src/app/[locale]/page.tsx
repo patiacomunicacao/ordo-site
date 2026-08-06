@@ -2,7 +2,7 @@ export const revalidate = 300;
 
 import type { Metadata } from "next";
 
-const BASE = "https://ordoconsultoria.com.br";
+const BASE = "https://ordoautomacao.com.br";
 
 export async function generateMetadata({
   params,

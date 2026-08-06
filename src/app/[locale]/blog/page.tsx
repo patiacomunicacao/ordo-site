@@ -18,7 +18,7 @@ interface Props {
   searchParams: Promise<{ tag?: string }>;
 }
 
-const BASE = "https://ordoconsultoria.com.br";
+const BASE = "https://ordoautomacao.com.br";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
