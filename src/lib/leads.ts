@@ -103,6 +103,20 @@ export async function deleteLead(id: string): Promise<void> {
 
 // ─── Webhook ──────────────────────────────────────────────────────────────────
 
+function leadPayload(lead: Lead) {
+  return {
+    id: lead.id,
+    name: lead.name,
+    phone: lead.phone ?? "",
+    email: lead.email ?? "",
+    summary: lead.summary,
+    temperature: lead.temperature,
+    serviceInterest: lead.serviceInterest ?? "",
+    createdAt: lead.createdAt,
+    source: "chat_ordo_site",
+  };
+}
+
 export async function sendLeadToWebhook(
   lead: Lead,
   webhookUrl: string
@@ -111,20 +125,22 @@ export async function sendLeadToWebhook(
     const res = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: lead.id,
-        name: lead.name,
-        phone: lead.phone ?? "",
-        email: lead.email ?? "",
-        summary: lead.summary,
-        temperature: lead.temperature,
-        serviceInterest: lead.serviceInterest ?? "",
-        createdAt: lead.createdAt,
-        source: "chat_ordo_site",
-      }),
+      body: JSON.stringify(leadPayload(lead)),
     });
     return res.ok;
   } catch {
     return false;
   }
+}
+
+export async function sendLeadToAllWebhooks(
+  lead: Lead,
+  webhooks: Array<{ url: string; enabled: boolean }>
+): Promise<boolean> {
+  const active = webhooks.filter((w) => w.enabled && w.url.trim());
+  if (active.length === 0) return false;
+  const results = await Promise.allSettled(
+    active.map((w) => sendLeadToWebhook(lead, w.url))
+  );
+  return results.some((r) => r.status === "fulfilled" && r.value);
 }

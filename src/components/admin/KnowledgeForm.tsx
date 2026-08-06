@@ -15,7 +15,7 @@ import {
   Webhook,
 } from "lucide-react";
 import Link from "next/link";
-import type { KnowledgeBase, KbService, KbFaq } from "@/lib/knowledge";
+import type { KnowledgeBase, KbService, KbFaq, WebhookConfig } from "@/lib/knowledge";
 
 // ─── Small UI helpers ─────────────────────────────────────────────────────────
 
@@ -254,6 +254,110 @@ function FaqEditor({
   );
 }
 
+// ─── Webhook list ─────────────────────────────────────────────────────────────
+
+function WebhookEditor({
+  webhooks,
+  onChange,
+}: {
+  webhooks: WebhookConfig[];
+  onChange: (w: WebhookConfig[]) => void;
+}) {
+  function update(id: string, patch: Partial<WebhookConfig>) {
+    onChange(webhooks.map((w) => (w.id === id ? { ...w, ...patch } : w)));
+  }
+  function remove(id: string) {
+    onChange(webhooks.filter((w) => w.id !== id));
+  }
+  function add() {
+    onChange([
+      ...webhooks,
+      { id: crypto.randomUUID(), name: "", url: "", enabled: true },
+    ]);
+  }
+
+  return (
+    <div className="space-y-4">
+      {webhooks.length === 0 && (
+        <p className="text-sm text-gray-400 text-center py-3">
+          Nenhum webhook configurado. Adicione um abaixo.
+        </p>
+      )}
+      {webhooks.map((w, i) => (
+        <div
+          key={w.id}
+          className={`border rounded-xl p-4 space-y-3 transition-colors ${
+            w.enabled ? "border-gray-200" : "border-gray-100 bg-gray-50 opacity-70"
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <button
+                type="button"
+                onClick={() => update(w.id, { enabled: !w.enabled })}
+                title={w.enabled ? "Desativar" : "Ativar"}
+                className={`relative flex-shrink-0 w-9 h-5 rounded-full transition-colors ${
+                  w.enabled ? "bg-[#4F3DB5]" : "bg-gray-300"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                    w.enabled ? "translate-x-4" : "translate-x-0"
+                  }`}
+                />
+              </button>
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                Webhook {i + 1}
+                {!w.enabled && <span className="ml-1 text-gray-300">(inativo)</span>}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => remove(w.id)}
+              className="p-1 text-gray-300 hover:text-red-400 transition-colors flex-shrink-0"
+              title="Remover"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <Label>Nome (identificação)</Label>
+              <Input
+                value={w.name}
+                onChange={(v) => update(w.id, { name: v })}
+                placeholder="Ex: ClickUp, Make, Zapier CRM"
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <Label>URL do webhook</Label>
+              <Input
+                value={w.url}
+                onChange={(v) => update(w.id, { url: v })}
+                placeholder="https://hooks.zapier.com/... ou https://hook.eu1.make.com/..."
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={add}
+        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#4F3DB5] hover:text-[#4F3DB5] transition-colors flex items-center justify-center gap-2"
+      >
+        <Plus size={14} />
+        Adicionar webhook
+      </button>
+
+      <p className="text-xs text-gray-400">
+        Quando um lead for capturado, os dados serão enviados via POST para todos os webhooks ativos. Você pode adicionar quantos precisar (ClickUp, Make, Zapier, n8n etc.).
+      </p>
+    </div>
+  );
+}
+
 // ─── Prompt preview ───────────────────────────────────────────────────────────
 
 function PromptPreview({ prompt }: { prompt: string }) {
@@ -335,9 +439,9 @@ export default function KnowledgeForm() {
     setKb({ ...kb, behavior: { ...kb.behavior, [field]: value } });
   }
 
-  function setIntegrations(field: keyof KnowledgeBase["integrations"], value: string) {
+  function setWebhooks(webhooks: WebhookConfig[]) {
     if (!kb) return;
-    setKb({ ...kb, integrations: { ...(kb.integrations ?? { clickupWebhookUrl: "" }), [field]: value } });
+    setKb({ ...kb, integrations: { ...kb.integrations, webhooks } });
   }
 
   if (!kb) {
@@ -504,20 +608,13 @@ export default function KnowledgeForm() {
         {/* Integrations */}
         <SectionCard
           icon={<Webhook size={16} />}
-          title="Integrações"
-          subtitle="Envie leads automaticamente para o ClickUp, Make, Zapier ou qualquer webhook"
+          title="Integrações — Webhooks"
+          subtitle="Envie leads automaticamente para o ClickUp, Make, Zapier, n8n ou qualquer serviço"
         >
-          <div>
-            <Label>URL do Webhook (ClickUp / Make / Zapier)</Label>
-            <Input
-              value={kb.integrations?.clickupWebhookUrl ?? ""}
-              onChange={(v) => setIntegrations("clickupWebhookUrl", v)}
-              placeholder="https://hooks.zapier.com/... ou https://hook.eu1.make.com/..."
-            />
-            <p className="text-xs text-gray-400 mt-1.5">
-              Quando um lead for capturado pelo chat, os dados (nome, telefone, e-mail, resumo e temperatura) serão enviados via POST para este endereço. Deixe em branco para desativar.
-            </p>
-          </div>
+          <WebhookEditor
+            webhooks={kb.integrations?.webhooks ?? []}
+            onChange={setWebhooks}
+          />
         </SectionCard>
 
         {/* Prompt preview */}

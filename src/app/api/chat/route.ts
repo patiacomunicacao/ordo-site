@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { ChatSchema } from "@/lib/validations";
 import { getKnowledgeBase, buildSystemPrompt } from "@/lib/knowledge";
-import { saveLead, sendLeadToWebhook, type Lead } from "@/lib/leads";
+import { saveLead, sendLeadToAllWebhooks, type Lead } from "@/lib/leads";
 import { getEnv } from "@/lib/env";
 
 export const runtime = "nodejs";
@@ -170,10 +170,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
     await saveLead(lead);
 
-    // Send to webhook if configured
-    const webhookUrl = kb.integrations?.clickupWebhookUrl?.trim();
-    if (webhookUrl) {
-      const sent = await sendLeadToWebhook(lead, webhookUrl);
+    // Send to all active webhooks
+    const webhooks = kb.integrations?.webhooks ?? [];
+    if (webhooks.length > 0) {
+      const sent = await sendLeadToAllWebhooks(lead, webhooks);
       if (sent) {
         lead.webhookSent = true;
         lead.webhookSentAt = new Date().toISOString();

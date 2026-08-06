@@ -16,10 +16,17 @@ export interface KbFaq {
   answer: string;
 }
 
+export interface WebhookConfig {
+  id: string;
+  name: string;     // ex: "ClickUp", "Make – Leads", "Zapier CRM"
+  url: string;
+  enabled: boolean;
+}
+
 export interface KnowledgeBase {
   company: {
     name: string;
-    description: string;    // o que a empresa faz
+    description: string;
     location: string;
     whatsapp: string;
     email: string;
@@ -27,13 +34,13 @@ export interface KnowledgeBase {
   services: KbService[];
   faqs: KbFaq[];
   behavior: {
-    tone: string;               // ex: "cordial, direto e profissional"
-    mainGoal: string;           // objetivo principal do assistente
-    restrictions: string;       // o que NÃO fazer
-    customInstructions: string; // instruções livres adicionais
+    tone: string;
+    mainGoal: string;
+    restrictions: string;
+    customInstructions: string;
   };
   integrations: {
-    clickupWebhookUrl: string;  // webhook para envio de leads ao ClickUp (ou Make/Zapier)
+    webhooks: WebhookConfig[];
   };
 }
 
@@ -129,7 +136,7 @@ const DEFAULT_KB: KnowledgeBase = {
     customInstructions: "",
   },
   integrations: {
-    clickupWebhookUrl: "",
+    webhooks: [],
   },
 };
 
@@ -154,10 +161,27 @@ async function ensureSchema() {
   schemaReady = true;
 }
 
+function migrateKb(raw: Record<string, unknown>): KnowledgeBase {
+  const integrations = raw.integrations as Record<string, unknown> | undefined;
+  if (integrations && "clickupWebhookUrl" in integrations && !("webhooks" in integrations)) {
+    const oldUrl = (integrations.clickupWebhookUrl as string) ?? "";
+    return {
+      ...(raw as unknown as KnowledgeBase),
+      integrations: {
+        webhooks: oldUrl.trim()
+          ? [{ id: crypto.randomUUID(), name: "Webhook", url: oldUrl.trim(), enabled: true }]
+          : [],
+      },
+    };
+  }
+  return raw as unknown as KnowledgeBase;
+}
+
 export async function getKnowledgeBase(): Promise<KnowledgeBase> {
   await ensureSchema();
   const rows = await sql`SELECT data FROM knowledge_base WHERE id = 1`;
-  return (rows[0]?.data as KnowledgeBase) ?? DEFAULT_KB;
+  const raw = rows[0]?.data ?? DEFAULT_KB;
+  return migrateKb(raw as Record<string, unknown>);
 }
 
 export async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {

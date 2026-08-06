@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getLeads, saveLead, deleteLead, sendLeadToWebhook } from "@/lib/leads";
+import { getLeads, saveLead, deleteLead, sendLeadToAllWebhooks } from "@/lib/leads";
 import { getKnowledgeBase } from "@/lib/knowledge";
 
 export const runtime = "nodejs";
@@ -13,7 +13,7 @@ export async function DELETE(
   return NextResponse.json({ ok: true });
 }
 
-// POST /api/admin/leads/:id — reenviar ao webhook
+// POST /api/admin/leads/:id — reenviar a todos os webhooks ativos
 export async function POST(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -27,16 +27,17 @@ export async function POST(
   }
 
   const kb = await getKnowledgeBase();
-  const webhookUrl = kb.integrations?.clickupWebhookUrl?.trim();
+  const webhooks = kb.integrations?.webhooks ?? [];
+  const active = webhooks.filter((w) => w.enabled && w.url.trim());
 
-  if (!webhookUrl) {
+  if (active.length === 0) {
     return NextResponse.json(
-      { error: "Webhook não configurado" },
+      { error: "Nenhum webhook ativo configurado" },
       { status: 400 }
     );
   }
 
-  const sent = await sendLeadToWebhook(lead, webhookUrl);
+  const sent = await sendLeadToAllWebhooks(lead, webhooks);
   if (sent) {
     lead.webhookSent = true;
     lead.webhookSentAt = new Date().toISOString();
@@ -44,5 +45,5 @@ export async function POST(
     return NextResponse.json({ ok: true });
   }
 
-  return NextResponse.json({ error: "Falha ao enviar ao webhook" }, { status: 502 });
+  return NextResponse.json({ error: "Falha ao enviar aos webhooks" }, { status: 502 });
 }
