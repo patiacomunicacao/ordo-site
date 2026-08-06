@@ -6,12 +6,29 @@ interface Props {
   params: Promise<{ locale: string }>;
 }
 
+const BASE = "https://ordoconsultoria.com.br";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "cases" });
+  const isEn = locale === "en";
+  const url = isEn ? `${BASE}/en/casos` : `${BASE}/casos`;
+  const title = t("metaTitle");
+  const description = t("metaDescription");
+
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: { "pt-BR": `${BASE}/casos`, en: `${BASE}/en/casos` },
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+    },
   };
 }
 

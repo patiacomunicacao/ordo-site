@@ -18,12 +18,29 @@ interface Props {
   searchParams: Promise<{ tag?: string }>;
 }
 
+const BASE = "https://ordoconsultoria.com.br";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
+  const isEn = locale === "en";
+  const url = isEn ? `${BASE}/en/blog` : `${BASE}/blog`;
+  const title = t("metaTitle");
+  const description = t("metaDescription");
+
   return {
-    title: t("metaTitle"),
-    description: t("metaDescription"),
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: { "pt-BR": `${BASE}/blog`, en: `${BASE}/en/blog` },
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+    },
   };
 }
 

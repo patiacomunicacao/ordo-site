@@ -1,5 +1,38 @@
 export const revalidate = 300;
 
+import type { Metadata } from "next";
+
+const BASE = "https://ordoconsultoria.com.br";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === "en";
+  const url = isEn ? `${BASE}/en` : BASE;
+  const title = isEn
+    ? "ORDO Consultoria | Process Mapping, Automation & AI for SMBs"
+    : "ORDO Consultoria | Processos, Automação e IA para PMEs";
+  const description = isEn
+    ? "ORDO helps small and medium businesses grow efficiently through process mapping, automation, and artificial intelligence."
+    : "A ORDO ajuda pequenas e médias empresas a crescerem com eficiência por meio do mapeamento de processos, automação e inteligência artificial.";
+
+  return {
+    alternates: {
+      canonical: url,
+      languages: { "pt-BR": BASE, en: `${BASE}/en` },
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "website",
+    },
+  };
+}
+
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/sections/Hero";
 import WhyOrdo from "@/components/sections/WhyOrdo";

@@ -14,16 +14,43 @@ export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
 }
 
+const BASE = "https://ordoconsultoria.com.br";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post not found" };
+
+  const isEn = locale === "en";
+  const title = post.seoTitle || post.title;
+  const description = post.seoDescription || post.summary;
+  const image = post.ogImage ?? post.coverImage;
+  const url = isEn ? `${BASE}/en/blog/${slug}` : `${BASE}/blog/${slug}`;
+
   return {
-    title: post.seoTitle || post.title,
-    description: post.seoDescription || post.summary,
-    openGraph: post.ogImage || post.coverImage
-      ? { images: [post.ogImage ?? post.coverImage!] }
-      : undefined,
+    title,
+    description,
+    alternates: {
+      canonical: url,
+      languages: {
+        "pt-BR": `${BASE}/blog/${slug}`,
+        en: `${BASE}/en/blog/${slug}`,
+      },
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: "article",
+      publishedTime: post.date,
+      ...(image ? { images: [{ url: image, alt: post.coverAlt ?? title }] } : {}),
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title,
+      description,
+      ...(image ? { images: [image] } : {}),
+    },
   };
 }
 
@@ -44,10 +71,33 @@ export default async function BlogPostPage({ params }: Props) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
+  const isEn = locale === "en";
+  const postUrl = isEn ? `${BASE}/en/blog/${slug}` : `${BASE}/blog/${slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.seoTitle || post.title,
+    description: post.seoDescription || post.summary,
+    datePublished: post.date,
+    url: postUrl,
+    author: { "@type": "Organization", name: "ORDO Consultoria", url: BASE },
+    publisher: {
+      "@type": "Organization",
+      name: "ORDO Consultoria",
+      url: BASE,
+      logo: { "@type": "ImageObject", url: `${BASE}/images/logo.png` },
+    },
+    ...(post.coverImage ? { image: post.ogImage ?? post.coverImage } : {}),
+  };
+
   const related = await getRelatedPosts(slug);
 
   return (
     <main className="min-h-screen bg-white pt-28 pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <Link
           href="/blog"

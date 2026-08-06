@@ -22,27 +22,48 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "ORDO Consultoria | Processos, Automação e IA para PMEs",
-    template: "%s | ORDO Consultoria",
-  },
-  description:
-    "A ORDO ajuda pequenas e médias empresas a crescerem com eficiência por meio do mapeamento de processos, automação e inteligência artificial.",
-  authors: [{ name: "ORDO Consultoria" }],
-  creator: "ORDO Consultoria",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+const BASE = "https://ordoconsultoria.com.br";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isEn = locale === "en";
+
+  const title = isEn
+    ? "ORDO Consultoria | Process Mapping, Automation & AI for SMBs"
+    : "ORDO Consultoria | Processos, Automação e IA para PMEs";
+  const description = isEn
+    ? "ORDO helps small and medium businesses grow efficiently through process mapping, automation, and artificial intelligence."
+    : "A ORDO ajuda pequenas e médias empresas a crescerem com eficiência por meio do mapeamento de processos, automação e inteligência artificial.";
+
+  return {
+    metadataBase: new URL(BASE),
+    title: { default: title, template: "%s | ORDO Consultoria" },
+    description,
+    authors: [{ name: "ORDO Consultoria" }],
+    creator: "ORDO Consultoria",
+    openGraph: {
+      type: "website",
+      siteName: "ORDO Consultoria",
+      locale: isEn ? "en_US" : "pt_BR",
+    },
+    twitter: { card: "summary_large_image" },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-};
+  };
+}
 
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
 
@@ -71,6 +92,24 @@ export default async function LocaleLayout({
       className={`${outfit.variable} ${dmSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "ORDO Consultoria",
+              url: BASE,
+              logo: `${BASE}/images/logo.png`,
+              contactPoint: {
+                "@type": "ContactPoint",
+                contactType: "customer service",
+                areaServed: "BR",
+                availableLanguage: ["Portuguese", "English"],
+              },
+            }),
+          }}
+        />
         <NextIntlClientProvider messages={messages}>
           <PublicShell>{children}</PublicShell>
         </NextIntlClientProvider>
