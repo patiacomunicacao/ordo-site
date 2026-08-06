@@ -6,6 +6,7 @@ import { MessageCircle, X, Send } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { ChatMessage } from "@/types";
+import { trackEvent } from "@/lib/gtag";
 
 const WELCOME_MESSAGE: ChatMessage = {
   id: "welcome",
@@ -207,6 +208,10 @@ export default function ChatWidget() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const data = (await res.json()) as { content?: string; error?: string; leadCaptured?: boolean };
+
+      if (data.leadCaptured) {
+        trackEvent("generate_lead", { method: "chat", page_location: window.location.href });
+      }
 
       setMessages((prev) => [
         ...prev,

@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, BarChart3, Flame, Gauge, Globe } from "lucide-react";
+import { ArrowLeft, ExternalLink, BarChart3, Flame, Gauge, Globe, TrendingUp } from "lucide-react";
 
 const VERCEL_URL = "https://vercel.com/patiacomunicacao/ordo-site/analytics";
 const CLARITY_URL = "https://clarity.microsoft.com/projects";
+const GA4_URL = "https://analytics.google.com";
 
 function ToolCard({
   icon,
@@ -109,7 +110,24 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Tool cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+        <ToolCard
+          icon={<TrendingUp size={22} />}
+          title="Google Analytics 4"
+          description="Rastreamento completo de conversões, funil de leads, origem do tráfego e integração com Search Console."
+          href={GA4_URL}
+          badge="Conversões"
+          color="#E37400"
+          metrics={[
+            "Eventos de lead",
+            "Origem do tráfego",
+            "Funil de conversão",
+            "Search Console",
+            "Relatórios de público",
+            "Metas e conversões",
+          ]}
+        />
+
         <ToolCard
           icon={<BarChart3 size={22} />}
           title="Vercel Analytics"
@@ -160,6 +178,51 @@ export default function AnalyticsPage() {
             "Por dispositivo",
           ]}
         />
+      </div>
+
+      {/* GA4 setup guide */}
+      <div className="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "#E37400" + "18" }}>
+            <TrendingUp size={16} style={{ color: "#E37400" }} />
+          </div>
+          <div>
+            <h2 className="text-sm font-bold text-gray-900">Configurar Google Analytics 4 (rastreamento de conversões)</h2>
+            <p className="text-xs text-gray-400">Integra com Search Console · rastreia leads do chat e formulário</p>
+          </div>
+        </div>
+        <div className="space-y-5">
+          <SetupStep
+            n="1"
+            title="Criar propriedade no GA4"
+            description={<>Acesse <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="text-[#4F3DB5] underline">analytics.google.com</a> → clique em &quot;Criar propriedade&quot; → preencha nome &quot;ORDO Site&quot; → URL: ordoautomacao.com.br → crie.</>}
+          />
+          <SetupStep
+            n="2"
+            title="Copiar o ID de medição"
+            description='Na propriedade criada, vá em Administrador → Fluxos de dados → clique no fluxo → copie o ID de medição (formato G-XXXXXXXXXX).'
+          />
+          <SetupStep
+            n="3"
+            title="Adicionar no Vercel"
+            description={<>No painel do Vercel → Settings → Environment Variables → adicione:<br /><code className="text-xs bg-gray-100 px-2 py-0.5 rounded font-mono mt-1 inline-block">NEXT_PUBLIC_GA_ID = G-XXXXXXXXXX</code><br />Marque os ambientes Production, Preview e Development.</>}
+          />
+          <SetupStep
+            n="4"
+            title="Fazer redeploy"
+            description="No Vercel → Deployments → clique nos 3 pontos do último deploy → Redeploy. O GA4 começa a rastrear após consentimento do usuário."
+          />
+          <SetupStep
+            n="5"
+            title="Marcar generate_lead como conversão"
+            description='No GA4 → Administrador → Eventos → encontre "generate_lead" → ative o toggle "Marcar como conversão". Os dados aparecem em Relatórios → Conversões.'
+          />
+          <SetupStep
+            n="6"
+            title="Vincular ao Search Console (opcional mas recomendado)"
+            description='No GA4 → Administrador → Vinculações de produtos → Search Console → vincule a propriedade ordoautomacao.com.br. Passa a mostrar quais termos de busca geram visitas e conversões.'
+          />
+        </div>
       </div>
 
       {/* Clarity setup guide */}

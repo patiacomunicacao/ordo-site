@@ -67,6 +67,7 @@ export async function generateMetadata({
 }
 
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -116,7 +117,7 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
-        <ConsentScripts clarityId={CLARITY_ID} />
+        <ConsentScripts clarityId={CLARITY_ID} gaId={GA_ID} />
         <CookieBanner locale={locale} />
       </body>
     </html>

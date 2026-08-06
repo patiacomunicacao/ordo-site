@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/gtag";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send, CheckCircle2, Mail, Phone, MapPin, Clock } from "lucide-react";
@@ -68,7 +69,13 @@ export default function ContactForm({ siteConfig }: { siteConfig?: SiteConfig })
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (res.ok) setSubmitted(true);
+    if (res.ok) {
+      setSubmitted(true);
+      trackEvent("generate_lead", {
+        method: "contact_form",
+        page_location: window.location.href,
+      });
+    }
   };
 
   return (
