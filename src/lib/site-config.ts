@@ -45,7 +45,7 @@ async function ensureSchema() {
     VALUES (1, ${JSON.stringify(DEFAULT_SITE_CONFIG)})
     ON CONFLICT (id) DO UPDATE
       SET data = EXCLUDED.data
-      WHERE site_config.data->>'email' = 'contato@ordoconsultoria.com.br'
+      WHERE site_config.data->>'email' = 'contato@ordoautomacao.com.br'
          OR site_config.data->>'phone' = '(41) 99999-0000'
   `;
   schemaReady = true;

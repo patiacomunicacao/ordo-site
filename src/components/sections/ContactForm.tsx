@@ -41,7 +41,7 @@ export default function ContactForm({ siteConfig }: { siteConfig?: SiteConfig })
   const [submitted, setSubmitted] = useState(false);
 
   const cfg = siteConfig ?? {
-    email: "contato@ordoconsultoria.com.br",
+    email: "contato@ordoautomacao.com.br",
     phone: "(41) 99999-0000",
     whatsapp: "5541999990000",
     address: "São José dos Pinhais / PR",

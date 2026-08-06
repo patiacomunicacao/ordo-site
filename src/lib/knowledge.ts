@@ -53,7 +53,7 @@ const DEFAULT_KB: KnowledgeBase = {
       "empresa especializada em mapeamento de processos, automação e IA para PMEs",
     location: "Curitiba / São José dos Pinhais, PR",
     whatsapp: "(41) 99999-0000",
-    email: "contato@ordoconsultoria.com.br",
+    email: "contato@ordoautomacao.com.br",
   },
   services: [
     {

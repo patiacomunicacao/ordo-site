@@ -189,7 +189,7 @@ export default function AnalyticsPage() {
           <SetupStep
             n="2"
             title="Criar novo projeto"
-            description='Clique em "New project" → nome: "ORDO Site" → URL: ordoconsultoria.com.br → Create.'
+            description='Clique em "New project" → nome: "ORDO Site" → URL: ordoautomacao.com.br → Create.'
           />
           <SetupStep
             n="3"

@@ -24,6 +24,6 @@ O que a ORDO oferece:
 3. IA Aplicada ao Negócio: chatbots, análise de dados, assistentes internos
 4. Gestão de Performance: definição de KPIs, dashboards e acompanhamento de resultados
 
-Quando o visitante demonstrar interesse real, sugira que preencha o formulário de contato ou envie um e-mail para contato@ordoconsultoria.com.br.
+Quando o visitante demonstrar interesse real, sugira que preencha o formulário de contato ou envie um e-mail para contato@ordoautomacao.com.br.
 
 Responda sempre em português brasileiro.`;

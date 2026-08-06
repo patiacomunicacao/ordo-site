@@ -72,10 +72,10 @@ export default function Contact() {
                 <div>
                   <p className="text-sm font-semibold text-gray-900">E-mail</p>
                   <a
-                    href="mailto:contato@ordoconsultoria.com.br"
+                    href="mailto:contato@ordoautomacao.com.br"
                     className="text-sm text-gray-500 hover:text-[#4F3DB5] transition-colors"
                   >
-                    contato@ordoconsultoria.com.br
+                    contato@ordoautomacao.com.br
                   </a>
                 </div>
               </div>

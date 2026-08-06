@@ -227,7 +227,7 @@ export default function ChatWidget() {
           id: crypto.randomUUID(),
           role: "assistant",
           content:
-            "Ocorreu um erro ao processar sua mensagem. Tente novamente ou entre em contato pelo e-mail contato@ordoconsultoria.com.br.",
+            "Ocorreu um erro ao processar sua mensagem. Tente novamente ou entre em contato pelo e-mail contato@ordoautomacao.com.br.",
           createdAt: new Date(),
         },
       ]);
