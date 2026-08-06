@@ -1,5 +1,3 @@
-// Home page — importa e compõe todas as seções da landing page
-// ISR: página cacheada, revalidada pelo admin ao salvar ou a cada 5 min no máximo
 export const revalidate = 300;
 
 import Footer from "@/components/layout/Footer";

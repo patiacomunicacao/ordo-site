@@ -1,0 +1,175 @@
+{
+  "nav": {
+    "about": "Sobre",
+    "services": "Serviços",
+    "methodology": "Metodologia",
+    "contact": "Contato",
+    "cases": "Cases",
+    "blog": "Blog",
+    "cta": "Quero uma proposta",
+    "openMenu": "Abrir menu"
+  },
+  "hero": {
+    "badge": "Empresas de Curitiba e região já transformaram seus processos",
+    "headline1": "Processos mais inteligentes.",
+    "headline2": "Resultados que você vê.",
+    "subheadline": "Mapeamos, automatizamos e implementamos IA no dia a dia da sua empresa — sem complexidade, sem desperdício.",
+    "ctaPrimary": "Conhecer os serviços",
+    "ctaSecondary": "Falar com a ORDO"
+  },
+  "whyOrdo": {
+    "eyebrow": "Nossos diferenciais",
+    "title": "Por que a ORDO?",
+    "subtitle": "Combinamos experiência prática, metodologia comprovada e tecnologia acessível para transformar a operação da sua empresa.",
+    "focusPme": {
+      "title": "Foco exclusivo em PMEs",
+      "description": "Entendemos a realidade das pequenas e médias empresas: times enxutos, recursos limitados e necessidade de resultados rápidos. Nossas soluções são dimensionadas para o seu contexto."
+    },
+    "agileMethod": {
+      "title": "Metodologia ágil",
+      "description": "Trabalhamos em ciclos curtos com entregas incrementais. Você vê o progresso semana a semana e pode ajustar o rumo antes de comprometer tempo e orçamento."
+    },
+    "closeSupport": {
+      "title": "Acompanhamento próximo",
+      "description": "Não somos consultores que entregam relatórios e somem. Ficamos ao seu lado durante toda a implementação e no período de consolidação dos resultados."
+    },
+    "measurableRoi": {
+      "title": "ROI mensurável",
+      "description": "Definimos métricas de sucesso antes de começar e acompanhamos cada uma delas. Transparência total sobre o retorno gerado em relação ao investimento feito."
+    }
+  },
+  "services": {
+    "eyebrow": "O que fazemos",
+    "title": "Serviços sob medida para PMEs",
+    "subtitle": "Soluções práticas com escopo claro, entrega ágil e resultado mensurável.",
+    "cta": "Saiba mais",
+    "mapping": {
+      "title": "Mapeamento de Processos",
+      "description": "Identificamos gargalos, redundâncias e oportunidades de melhoria na sua operação. Documentamos o estado atual e desenhamos o fluxo ideal."
+    },
+    "automation": {
+      "title": "Automação de Processos",
+      "description": "Eliminamos tarefas manuais com soluções que funcionam sem intervenção humana, liberando sua equipe para o que realmente importa."
+    },
+    "ai": {
+      "title": "Implementação de IA",
+      "description": "Aplicamos inteligência artificial de forma prática: atendimento automatizado, análise de dados e assistentes internos adaptados ao seu negócio."
+    },
+    "projectManagement": {
+      "title": "Gestão de Projetos",
+      "description": "Estruturamos a gestão de projetos da sua empresa com metodologias ágeis, garantindo entregas no prazo e dentro do escopo definido."
+    },
+    "training": {
+      "title": "Treinamento e Capacitação",
+      "description": "Capacitamos sua equipe para operar com eficiência as novas ferramentas, processos e metodologias implementados pela ORDO."
+    },
+    "digitalTransformation": {
+      "title": "Transformação Digital",
+      "description": "Projeto completo de digitalização da operação: mapeamos, priorizamos e implementamos um roadmap de transformação sob medida para sua empresa."
+    }
+  },
+  "methodology": {
+    "eyebrow": "Nosso método",
+    "title": "Como trabalhamos",
+    "subtitle": "Um processo estruturado, do diagnóstico à manutenção dos resultados.",
+    "step": "PASSO",
+    "diagnosis": {
+      "title": "Diagnóstico",
+      "description": "Mapeamos sua operação atual, identificamos gargalos e priorizamos as oportunidades com maior potencial de retorno para o seu negócio."
+    },
+    "solutionMap": {
+      "title": "Mapa de Soluções",
+      "description": "Desenvolvemos um plano de ação claro com iniciativas priorizadas, cronograma realista e estimativa de impacto para cada entrega."
+    },
+    "implementation": {
+      "title": "Implementação",
+      "description": "Executamos as soluções lado a lado com sua equipe — automações, fluxos otimizados e ferramentas integradas ao dia a dia do negócio."
+    },
+    "monitoring": {
+      "title": "Monitoramento",
+      "description": "Acompanhamos os resultados, ajustamos o que for necessário e garantimos que os ganhos se consolidem e evoluam continuamente."
+    }
+  },
+  "socialProof": {
+    "projectsDelivered": "Projetos entregues",
+    "companiesServed": "Empresas atendidas",
+    "reworkReduction": "Redução média de retrabalho",
+    "withDefinedScope": "Com escopo definido",
+    "testimonialsEyebrow": "O que dizem nossos clientes",
+    "testimonialsTitle": "Resultados reais, empresas reais",
+    "testimonial1": "A ORDO mapeou nossa operação de obras em 3 semanas e identificou onde perdíamos tempo. Em 60 dias, reduzimos o ciclo de aprovação interna de 12 para 3 dias. O impacto no prazo de entrega foi imediato.",
+    "testimonial2": "Nossa clínica cresceu rápido e os processos não acompanharam. A ORDO estruturou o fluxo de agendamento, prontuário e faturamento. Hoje trabalhamos com 30% mais pacientes sem aumentar a equipe.",
+    "testimonial3": "Resistia à automação por achar que perderia o controle. A ORDO mostrou o contrário: automatizamos tarefas repetitivas e agora tenho mais tempo para análises que realmente agregam valor ao cliente.",
+    "testimonialIndicator": "Depoimento {n}"
+  },
+  "blogPreview": {
+    "eyebrow": "Conteúdo",
+    "title": "Do nosso blog",
+    "viewAll": "Ver todos os artigos"
+  },
+  "contact": {
+    "eyebrow": "Entre em contato",
+    "title": "Pronto para transformar seu negócio?",
+    "subtitle": "Preencha o formulário e retornamos em até 1 dia útil. Ou use o chat no canto da tela para uma resposta imediata.",
+    "labelEmail": "E-mail",
+    "labelWhatsApp": "WhatsApp",
+    "labelLocation": "Localização",
+    "labelHours": "Horário",
+    "fieldName": "Nome completo *",
+    "fieldNamePlaceholder": "João Silva",
+    "fieldCompany": "Empresa *",
+    "fieldCompanyPlaceholder": "Minha Empresa Ltda",
+    "fieldEmail": "E-mail *",
+    "fieldEmailPlaceholder": "joao@empresa.com",
+    "fieldPhone": "WhatsApp / Telefone *",
+    "fieldPhonePlaceholder": "(41) 99999-0000",
+    "fieldService": "Serviço de interesse *",
+    "fieldServicePlaceholder": "Selecione um serviço...",
+    "fieldMessage": "Mensagem",
+    "fieldMessageOptional": "(opcional)",
+    "fieldMessagePlaceholder": "Descreva brevemente o desafio ou o que você está buscando...",
+    "submit": "Enviar mensagem",
+    "submitting": "Enviando...",
+    "serviceOther": "Outro / Não sei ainda",
+    "privacyNote": "Seus dados são usados somente para entrar em contato com você.",
+    "successTitle": "Mensagem recebida!",
+    "successBody": "Retornaremos em até 1 dia útil. Até breve!"
+  },
+  "footer": {
+    "tagline1": "Processos. Automação. Inteligência.",
+    "tagline2": "Ajudamos PMEs a crescerem com eficiência operacional real.",
+    "navTitle": "Navegação",
+    "contactTitle": "Contato",
+    "copyright": "Todos os direitos reservados.",
+    "links": {
+      "about": "Sobre a ORDO",
+      "services": "Serviços",
+      "methodology": "Metodologia",
+      "blog": "Blog",
+      "contact": "Contato"
+    }
+  },
+  "blog": {
+    "eyebrow": "Conteúdo",
+    "title": "Blog ORDO",
+    "subtitle": "Artigos práticos sobre processos, automação e IA para PMEs.",
+    "metaTitle": "Blog",
+    "metaDescription": "Artigos sobre processos, automação e IA para pequenas e médias empresas.",
+    "filterAll": "Todos",
+    "noResults": "Nenhum artigo encontrado para esta categoria.",
+    "readingTime": "{min} min",
+    "postCta": {
+      "title": "Pronto para transformar sua operação?",
+      "body": "Fale com a ORDO e descubra como podemos ajudar o seu negócio.",
+      "button": "Quero uma proposta"
+    },
+    "backToAll": "Todos os artigos"
+  },
+  "cases": {
+    "eyebrow": "Resultados reais",
+    "title": "Cases ORDO",
+    "subtitle": "Projetos que entregamos — com números, metodologia e impacto real na operação dos clientes.",
+    "metaTitle": "Cases",
+    "metaDescription": "Resultados reais de empresas que transformaram sua operação com a ORDO — automação, IA e implementação de ferramentas."
+  }
+}

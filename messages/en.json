@@ -1,0 +1,175 @@
+{
+  "nav": {
+    "about": "About",
+    "services": "Services",
+    "methodology": "Methodology",
+    "contact": "Contact",
+    "cases": "Cases",
+    "blog": "Blog",
+    "cta": "Get a proposal",
+    "openMenu": "Open menu"
+  },
+  "hero": {
+    "badge": "Companies in Curitiba and the region have already transformed their processes",
+    "headline1": "Smarter processes.",
+    "headline2": "Results you can see.",
+    "subheadline": "We map, automate, and implement AI into your company daily operations — without complexity, without waste.",
+    "ctaPrimary": "Explore our services",
+    "ctaSecondary": "Talk to ORDO"
+  },
+  "whyOrdo": {
+    "eyebrow": "Our differentials",
+    "title": "Why ORDO?",
+    "subtitle": "We combine hands-on experience, proven methodology, and accessible technology to transform your company operations.",
+    "focusPme": {
+      "title": "Exclusively focused on SMEs",
+      "description": "We understand the reality of small and medium-sized businesses: lean teams, limited resources, and the need for fast results. Our solutions are sized for your context."
+    },
+    "agileMethod": {
+      "title": "Agile methodology",
+      "description": "We work in short cycles with incremental deliveries. You see progress week by week and can adjust direction before committing time and budget."
+    },
+    "closeSupport": {
+      "title": "Close support",
+      "description": "We are not consultants who hand over reports and disappear. We stay by your side throughout the entire implementation and during the results consolidation period."
+    },
+    "measurableRoi": {
+      "title": "Measurable ROI",
+      "description": "We define success metrics before we start and track each one of them. Full transparency on the return generated relative to the investment made."
+    }
+  },
+  "services": {
+    "eyebrow": "What we do",
+    "title": "Tailored services for SMEs",
+    "subtitle": "Practical solutions with a clear scope, agile delivery, and measurable results.",
+    "cta": "Learn more",
+    "mapping": {
+      "title": "Process Mapping",
+      "description": "We identify bottlenecks, redundancies, and improvement opportunities in your operation. We document the current state and design the ideal workflow."
+    },
+    "automation": {
+      "title": "Process Automation",
+      "description": "We eliminate manual tasks with solutions that work without human intervention, freeing your team for what truly matters."
+    },
+    "ai": {
+      "title": "AI Implementation",
+      "description": "We apply artificial intelligence in a practical way: automated support, data analysis, and internal assistants tailored to your business."
+    },
+    "projectManagement": {
+      "title": "Project Management",
+      "description": "We structure your company project management with agile methodologies, ensuring on-time delivery within the defined scope."
+    },
+    "training": {
+      "title": "Training & Enablement",
+      "description": "We train your team to efficiently operate the new tools, processes, and methodologies implemented by ORDO."
+    },
+    "digitalTransformation": {
+      "title": "Digital Transformation",
+      "description": "A complete operation digitization project: we map, prioritize, and implement a custom transformation roadmap for your company."
+    }
+  },
+  "methodology": {
+    "eyebrow": "Our method",
+    "title": "How we work",
+    "subtitle": "A structured process, from diagnosis to sustaining results.",
+    "step": "STEP",
+    "diagnosis": {
+      "title": "Diagnosis",
+      "description": "We map your current operation, identify bottlenecks, and prioritize the opportunities with the highest return potential for your business."
+    },
+    "solutionMap": {
+      "title": "Solution Map",
+      "description": "We develop a clear action plan with prioritized initiatives, a realistic schedule, and an impact estimate for each deliverable."
+    },
+    "implementation": {
+      "title": "Implementation",
+      "description": "We execute solutions side by side with your team — automations, optimized workflows, and tools integrated into the daily business operation."
+    },
+    "monitoring": {
+      "title": "Monitoring",
+      "description": "We track results, adjust what is necessary, and ensure that the gains consolidate and continuously improve."
+    }
+  },
+  "socialProof": {
+    "projectsDelivered": "Projects delivered",
+    "companiesServed": "Companies served",
+    "reworkReduction": "Average rework reduction",
+    "withDefinedScope": "With defined scope",
+    "testimonialsEyebrow": "What our clients say",
+    "testimonialsTitle": "Real results, real companies",
+    "testimonial1": "ORDO mapped our construction operations in 3 weeks and identified where we were losing time. In 60 days, we reduced the internal approval cycle from 12 to 3 days. The impact on delivery timelines was immediate.",
+    "testimonial2": "Our clinic grew quickly but our processes did not keep up. ORDO structured our scheduling, patient records, and billing workflows. Today we handle 30% more patients without adding headcount.",
+    "testimonial3": "I was resistant to automation, afraid of losing control. ORDO showed me the opposite: we automated repetitive tasks and now I have more time for analysis that truly adds value to clients.",
+    "testimonialIndicator": "Testimonial {n}"
+  },
+  "blogPreview": {
+    "eyebrow": "Content",
+    "title": "From our blog",
+    "viewAll": "View all articles"
+  },
+  "contact": {
+    "eyebrow": "Get in touch",
+    "title": "Ready to transform your business?",
+    "subtitle": "Fill out the form and we will get back to you within 1 business day. Or use the chat in the corner for an immediate response.",
+    "labelEmail": "E-mail",
+    "labelWhatsApp": "WhatsApp",
+    "labelLocation": "Location",
+    "labelHours": "Business hours",
+    "fieldName": "Full name *",
+    "fieldNamePlaceholder": "John Smith",
+    "fieldCompany": "Company *",
+    "fieldCompanyPlaceholder": "My Company LLC",
+    "fieldEmail": "E-mail *",
+    "fieldEmailPlaceholder": "john@company.com",
+    "fieldPhone": "WhatsApp / Phone *",
+    "fieldPhonePlaceholder": "+1 (555) 000-0000",
+    "fieldService": "Service of interest *",
+    "fieldServicePlaceholder": "Select a service...",
+    "fieldMessage": "Message",
+    "fieldMessageOptional": "(optional)",
+    "fieldMessagePlaceholder": "Briefly describe your challenge or what you are looking for...",
+    "submit": "Send message",
+    "submitting": "Sending...",
+    "serviceOther": "Other / Not sure yet",
+    "privacyNote": "Your data is used solely to get in touch with you.",
+    "successTitle": "Message received!",
+    "successBody": "We will get back to you within 1 business day. Talk soon!"
+  },
+  "footer": {
+    "tagline1": "Process. Automation. Intelligence.",
+    "tagline2": "We help SMEs grow with real operational efficiency.",
+    "navTitle": "Navigation",
+    "contactTitle": "Contact",
+    "copyright": "All rights reserved.",
+    "links": {
+      "about": "About ORDO",
+      "services": "Services",
+      "methodology": "Methodology",
+      "blog": "Blog",
+      "contact": "Contact"
+    }
+  },
+  "blog": {
+    "eyebrow": "Content",
+    "title": "ORDO Blog",
+    "subtitle": "Practical articles on processes, automation, and AI for SMEs.",
+    "metaTitle": "Blog",
+    "metaDescription": "Articles on processes, automation, and AI for small and medium-sized businesses.",
+    "filterAll": "All",
+    "noResults": "No articles found for this category.",
+    "readingTime": "{min} min",
+    "postCta": {
+      "title": "Ready to transform your operation?",
+      "body": "Talk to ORDO and discover how we can help your business.",
+      "button": "Get a proposal"
+    },
+    "backToAll": "All articles"
+  },
+  "cases": {
+    "eyebrow": "Real results",
+    "title": "ORDO Cases",
+    "subtitle": "Projects we delivered — with numbers, methodology, and real impact on our clients operations.",
+    "metaTitle": "Cases",
+    "metaDescription": "Real results from companies that transformed their operations with ORDO — automation, AI, and tool implementation."
+  }
+}

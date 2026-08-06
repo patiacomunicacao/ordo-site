@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -44,6 +45,7 @@ function GeometricBackground() {
 }
 
 export default function Hero() {
+  const t = useTranslations("hero");
   return (
     <section
       className="relative flex items-center min-h-screen pt-20 overflow-hidden"
@@ -51,7 +53,6 @@ export default function Hero() {
     >
       <GeometricBackground />
 
-      {/* Glow blobs */}
       <div
         className="absolute top-1/4 right-0 w-[40vw] h-[40vw] rounded-full opacity-30 pointer-events-none"
         style={{ background: "radial-gradient(circle, #AFA9EC 0%, transparent 70%)" }}
@@ -63,11 +64,7 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
         <div className="max-w-3xl">
-          {/* Badge */}
-          <motion.div
-            {...fadeUpProps(0)}
-            className="mb-6"
-          >
+          <motion.div {...fadeUpProps(0)} className="mb-6">
             <span
               className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border"
               style={{
@@ -77,30 +74,26 @@ export default function Hero() {
               }}
             >
               <Sparkles size={12} />
-              Empresas de Curitiba e região já transformaram seus processos
+              {t("badge")}
             </span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             {...fadeUpProps(0.1)}
             className="text-4xl sm:text-5xl md:text-[3.5rem] font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-6"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Processos mais inteligentes.{" "}
-            <span style={{ color: "#4F3DB5" }}>Resultados que você vê.</span>
+            {t("headline1")}{" "}
+            <span style={{ color: "#4F3DB5" }}>{t("headline2")}</span>
           </motion.h1>
 
-          {/* Subheadline */}
           <motion.p
             {...fadeUpProps(0.2)}
             className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-10 max-w-2xl"
           >
-            Mapeamos, automatizamos e implementamos IA no dia a dia da sua empresa
-            — sem complexidade, sem desperdício.
+            {t("subheadline")}
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             {...fadeUpProps(0.3)}
             className="flex flex-col sm:flex-row gap-3"
@@ -113,7 +106,7 @@ export default function Hero() {
               )}
               style={{ backgroundColor: "#4F3DB5" }}
             >
-              Conhecer os serviços
+              {t("ctaPrimary")}
               <ArrowRight size={17} className="ml-1.5" />
             </a>
             <a
@@ -124,13 +117,12 @@ export default function Hero() {
               )}
               style={{ borderColor: "#4F3DB5", color: "#4F3DB5" }}
             >
-              Falar com a ORDO
+              {t("ctaSecondary")}
             </a>
           </motion.div>
         </div>
       </div>
 
-      {/* Bottom wave */}
       <div className="absolute bottom-0 left-0 right-0 pointer-events-none">
         <svg viewBox="0 0 1440 72" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path

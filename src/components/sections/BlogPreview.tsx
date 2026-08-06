@@ -1,16 +1,17 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BlogPost } from "@/types";
+import { useTranslations, useLocale } from "next-intl";
 
 const TAG_COLORS: Record<string, { bg: string; text: string; accent: string }> = {
   Processos: { bg: "#4F3DB5", text: "#4F3DB5", accent: "#EEEDFE" },
-  Automação: { bg: "#AFA9EC", text: "#3C3489", accent: "#EEEDFE" },
-  IA:        { bg: "#3C3489", text: "#3C3489", accent: "#EEEDFE" },
+  "Automação": { bg: "#AFA9EC", text: "#3C3489", accent: "#EEEDFE" },
+  IA: { bg: "#3C3489", text: "#3C3489", accent: "#EEEDFE" },
 };
 
 function PlaceholderImage({ tag }: { tag: string }) {
@@ -26,14 +27,12 @@ function PlaceholderImage({ tag }: { tag: string }) {
   );
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("pt-BR", {
+function BlogCard({ post, locale }: { post: BlogPost; locale: string }) {
+  const tagStyle = TAG_COLORS[post.tag] ?? TAG_COLORS["Processos"];
+  const localeCode = locale === "en" ? "en-US" : "pt-BR";
+  const formattedDate = new Date(post.date).toLocaleDateString(localeCode, {
     day: "2-digit", month: "short", year: "numeric",
   });
-}
-
-function BlogCard({ post }: { post: BlogPost }) {
-  const tagStyle = TAG_COLORS[post.tag] ?? TAG_COLORS["Processos"];
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -59,20 +58,17 @@ function BlogCard({ post }: { post: BlogPost }) {
         >
           {post.tag}
         </span>
-
         <h3
           className="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-[#4F3DB5] transition-colors"
           style={{ fontFamily: "var(--font-heading)" }}
         >
           {post.title}
         </h3>
-
         <p className="text-sm text-gray-500 leading-relaxed flex-1 mb-4 line-clamp-3">
           {post.summary}
         </p>
-
         <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
-          <span>{formatDate(post.date)}</span>
+          <span>{formattedDate}</span>
           <span className="flex items-center gap-1">
             <Clock size={11} />
             {post.readingTime} min
@@ -84,6 +80,8 @@ function BlogCard({ post }: { post: BlogPost }) {
 }
 
 export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
+  const t = useTranslations("blogPreview");
+  const locale = useLocale();
   if (posts.length === 0) return null;
 
   return (
@@ -98,13 +96,13 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
         >
           <div>
             <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#4F3DB5" }}>
-              Conteúdo
+              {t("eyebrow")}
             </span>
             <h2
               className="mt-3 text-3xl sm:text-4xl font-extrabold text-gray-900"
               style={{ fontFamily: "var(--font-heading)" }}
             >
-              Do nosso blog
+              {t("title")}
             </h2>
           </div>
           <Link
@@ -114,7 +112,7 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
               "border-[#4F3DB5] text-[#4F3DB5] hover:bg-[#EEEDFE] flex-shrink-0 font-semibold"
             )}
           >
-            Ver todos os artigos
+            {t("viewAll")}
             <ArrowRight size={15} className="ml-1.5" />
           </Link>
         </motion.div>
@@ -128,7 +126,7 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: i * 0.1 }}
             >
-              <BlogCard post={post} />
+              <BlogCard post={post} locale={locale} />
             </motion.div>
           ))}
         </div>

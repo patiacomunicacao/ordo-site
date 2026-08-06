@@ -1,19 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
+import { usePathname as useNextPathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-
-const NAV_SECTIONS = [
-  { anchor: "sobre", label: "Sobre" },
-  { anchor: "servicos", label: "Serviços" },
-  { anchor: "metodologia", label: "Metodologia" },
-  { anchor: "contato", label: "Contato" },
-];
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
 
 function OrdoLogo({ className, white = false }: { className?: string; white?: boolean }) {
   return (
@@ -29,10 +24,19 @@ function OrdoLogo({ className, white = false }: { className?: string; white?: bo
 }
 
 export default function Navbar() {
+  const t = useTranslations("nav");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const nextPathname = useNextPathname();
   const isHome = pathname === "/";
+
+  const NAV_SECTIONS = [
+    { anchor: "sobre", label: t("about") },
+    { anchor: "servicos", label: t("services") },
+    { anchor: "metodologia", label: t("methodology") },
+    { anchor: "contato", label: t("contact") },
+  ];
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
@@ -40,8 +44,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close sheet on navigation
-  useEffect(() => { setIsOpen(false); }, [pathname]);
+  useEffect(() => { setIsOpen(false); }, [nextPathname]);
 
   function sectionHref(anchor: string) {
     return isHome ? `#${anchor}` : `/#${anchor}`;
@@ -80,7 +83,7 @@ export default function Navbar() {
                   : "text-gray-600 hover:text-[#4F3DB5]"
               )}
             >
-              Cases
+              {t("cases")}
             </Link>
             <Link
               href="/blog"
@@ -91,8 +94,9 @@ export default function Navbar() {
                   : "text-gray-600 hover:text-[#4F3DB5]"
               )}
             >
-              Blog
+              {t("blog")}
             </Link>
+            <LocaleSwitcher />
           </nav>
 
           {/* Desktop CTA */}
@@ -104,14 +108,14 @@ export default function Navbar() {
             )}
             style={{ backgroundColor: "#4F3DB5" }}
           >
-            Quero uma proposta
+            {t("cta")}
           </a>
 
           {/* Mobile Sheet */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger
               className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-[#4F3DB5] transition-colors"
-              aria-label="Abrir menu"
+              aria-label={t("openMenu")}
             >
               <Menu size={22} />
             </SheetTrigger>
@@ -141,32 +145,36 @@ export default function Navbar() {
                     )}
                     onClick={() => setIsOpen(false)}
                   >
-                    Cases
+                    {t("cases")}
                   </Link>
                   <Link
                     href="/blog"
                     className={cn(
-                      "text-sm font-medium py-3.5 transition-colors",
+                      "text-sm font-medium py-3.5 border-b border-gray-100 transition-colors",
                       pathname.startsWith("/blog")
                         ? "text-[#4F3DB5] font-semibold"
                         : "text-gray-700 hover:text-[#4F3DB5]"
                     )}
                     onClick={() => setIsOpen(false)}
                   >
-                    Blog
+                    {t("blog")}
                   </Link>
                 </nav>
+
+                <div className="flex items-center justify-between mt-6 mb-4">
+                  <LocaleSwitcher />
+                </div>
 
                 <a
                   href={sectionHref("contato")}
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     buttonVariants(),
-                    "mt-auto text-white font-semibold w-full justify-center"
+                    "mt-2 text-white font-semibold w-full justify-center"
                   )}
                   style={{ backgroundColor: "#4F3DB5" }}
                 >
-                  Quero uma proposta
+                  {t("cta")}
                 </a>
               </div>
             </SheetContent>

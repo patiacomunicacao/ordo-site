@@ -6,6 +6,7 @@ import TipTapImage from "@tiptap/extension-image";
 import TipTapLink from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
+import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
 import {
   Bold,
   Italic,
@@ -27,6 +28,10 @@ import {
   Pilcrow,
   FileCode,
   X,
+  Table as TableIcon,
+  Columns2,
+  Rows2,
+  Trash2,
 } from "lucide-react";
 import { useRef, useState } from "react";
 
@@ -82,12 +87,13 @@ function Toolbar({
   editor,
   onImageInsert,
   onHtmlInsert,
+  onTableInsert,
 }: {
   editor: Editor;
   onImageInsert: () => void;
   onHtmlInsert: () => void;
+  onTableInsert: () => void;
 }) {
-  // useEditorState ensures the toolbar re-renders whenever marks/nodes change
   const state = useEditorState({
     editor,
     selector: (ctx) => ({
@@ -105,6 +111,7 @@ function Toolbar({
       isCode: ctx.editor.isActive("code"),
       isCodeBlock: ctx.editor.isActive("codeBlock"),
       isLink: ctx.editor.isActive("link"),
+      isTable: ctx.editor.isActive("table"),
       canUndo: ctx.editor.can().undo(),
       canRedo: ctx.editor.can().redo(),
     }),
@@ -214,6 +221,64 @@ function Toolbar({
 
       <Sep />
 
+      {/* Table */}
+      <Btn onClick={onTableInsert} active={state.isTable} title="Inserir tabela">
+        <TableIcon size={15} />
+      </Btn>
+
+      {/* Table context controls — only shown when cursor is inside a table */}
+      {state.isTable && (
+        <>
+          <Btn
+            onClick={() => editor.chain().focus().addColumnBefore().run()}
+            title="Adicionar coluna antes"
+          >
+            <Columns2 size={15} />
+          </Btn>
+          <Btn
+            onClick={() => editor.chain().focus().addColumnAfter().run()}
+            title="Adicionar coluna depois"
+          >
+            <Columns2 size={15} style={{ transform: "scaleX(-1)" }} />
+          </Btn>
+          <Btn
+            onClick={() => editor.chain().focus().deleteColumn().run()}
+            title="Remover coluna"
+            disabled={false}
+          >
+            <span className="text-[11px] font-bold leading-none">−C</span>
+          </Btn>
+          <Sep />
+          <Btn
+            onClick={() => editor.chain().focus().addRowBefore().run()}
+            title="Adicionar linha antes"
+          >
+            <Rows2 size={15} />
+          </Btn>
+          <Btn
+            onClick={() => editor.chain().focus().addRowAfter().run()}
+            title="Adicionar linha depois"
+          >
+            <Rows2 size={15} style={{ transform: "scaleY(-1)" }} />
+          </Btn>
+          <Btn
+            onClick={() => editor.chain().focus().deleteRow().run()}
+            title="Remover linha"
+          >
+            <span className="text-[11px] font-bold leading-none">−L</span>
+          </Btn>
+          <Sep />
+          <Btn
+            onClick={() => editor.chain().focus().deleteTable().run()}
+            title="Remover tabela inteira"
+          >
+            <Trash2 size={15} />
+          </Btn>
+        </>
+      )}
+
+      <Sep />
+
       {/* Divider */}
       <Btn onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Linha divisória">
         <Minus size={15} />
@@ -228,8 +293,6 @@ function Toolbar({
     </div>
   );
 }
-
-// ─── Main editor ──────────────────────────────────────────────────────────────
 
 // ─── HTML insert modal ────────────────────────────────────────────────────────
 
@@ -289,6 +352,118 @@ function HtmlInsertModal({
   );
 }
 
+// ─── Table insert modal ───────────────────────────────────────────────────────
+
+function TableInsertModal({
+  onInsert,
+  onClose,
+}: {
+  onInsert: (rows: number, cols: number) => void;
+  onClose: () => void;
+}) {
+  const [rows, setRows] = useState(3);
+  const [cols, setCols] = useState(3);
+  const [hovered, setHovered] = useState<{ r: number; c: number } | null>(null);
+
+  const GRID = 8;
+
+  const displayRows = hovered ? Math.max(hovered.r + 1, rows) : rows;
+  const displayCols = hovered ? Math.max(hovered.c + 1, cols) : cols;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <div>
+            <p className="text-sm font-semibold text-gray-900">Inserir tabela</p>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Passe o mouse para selecionar o tamanho
+            </p>
+          </div>
+          <button type="button" onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="p-5">
+          {/* Grid picker */}
+          <div
+            className="inline-grid gap-1 mb-4"
+            style={{ gridTemplateColumns: `repeat(${GRID}, 1.5rem)` }}
+          >
+            {Array.from({ length: GRID * GRID }).map((_, i) => {
+              const r = Math.floor(i / GRID);
+              const c = i % GRID;
+              const active = r < (hovered ? hovered.r + 1 : rows) && c < (hovered ? hovered.c + 1 : cols);
+              return (
+                <div
+                  key={i}
+                  className="w-6 h-6 rounded-sm border cursor-pointer transition-colors"
+                  style={{
+                    backgroundColor: active ? "#EEEDFE" : "#f9fafb",
+                    borderColor: active ? "#4F3DB5" : "#e5e7eb",
+                  }}
+                  onMouseEnter={() => setHovered({ r, c })}
+                  onMouseLeave={() => setHovered(null)}
+                  onClick={() => { setRows(r + 1); setCols(c + 1); }}
+                />
+              );
+            })}
+          </div>
+
+          <p className="text-xs text-gray-500 mb-5">
+            {displayRows} × {displayCols} (linhas × colunas)
+          </p>
+
+          {/* Manual inputs */}
+          <div className="flex gap-3 mb-5">
+            <div className="flex-1">
+              <label className="block text-xs text-gray-500 mb-1">Linhas</label>
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={rows}
+                onChange={(e) => setRows(Math.max(1, Math.min(20, Number(e.target.value))))}
+                className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5]"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-gray-500 mb-1">Colunas</label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={cols}
+                onChange={(e) => setCols(Math.max(1, Math.min(10, Number(e.target.value))))}
+                className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5]"
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={() => { onInsert(rows, cols); onClose(); }}
+              className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#4F3DB5" }}
+            >
+              Inserir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main editor ──────────────────────────────────────────────────────────────
 
 export default function RichEditor({
@@ -300,6 +475,7 @@ export default function RichEditor({
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [showHtmlModal, setShowHtmlModal] = useState(false);
+  const [showTableModal, setShowTableModal] = useState(false);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -312,6 +488,10 @@ export default function RichEditor({
         HTMLAttributes: { target: "_blank", rel: "noopener noreferrer" },
       }),
       Placeholder.configure({ placeholder: "Escreva o conteúdo do post aqui…" }),
+      Table.configure({ resizable: false }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: value,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
@@ -333,6 +513,11 @@ export default function RichEditor({
     }
   }
 
+  function insertTable(rows: number, cols: number) {
+    if (!editor) return;
+    editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+  }
+
   if (!editor) return null;
 
   return (
@@ -343,10 +528,17 @@ export default function RichEditor({
           onClose={() => setShowHtmlModal(false)}
         />
       )}
+      {showTableModal && (
+        <TableInsertModal
+          onInsert={insertTable}
+          onClose={() => setShowTableModal(false)}
+        />
+      )}
       <Toolbar
         editor={editor}
         onImageInsert={() => fileInputRef.current?.click()}
         onHtmlInsert={() => setShowHtmlModal(true)}
+        onTableInsert={() => setShowTableModal(true)}
       />
       <EditorContent editor={editor} />
       <input

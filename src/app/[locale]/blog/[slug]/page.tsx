@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { getPostBySlug, getBlogPosts, getRelatedPosts } from "@/lib/blog";
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const posts = await getBlogPosts();
+  return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post) return { title: "Post não encontrado" };
+  if (!post) return { title: "Post not found" };
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.summary,
@@ -23,8 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export const revalidate = 300;
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("pt-BR", {
+function formatDate(iso: string, locale: string) {
+  const localeCode = locale === "en" ? "en-US" : "pt-BR";
+  return new Date(iso).toLocaleDateString(localeCode, {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -32,7 +39,8 @@ function formatDate(iso: string) {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: "blog" });
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
@@ -41,17 +49,15 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-white pt-28 pb-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        {/* Back */}
         <Link
           href="/blog"
           className="inline-flex items-center gap-1.5 text-sm font-medium mb-10 transition-colors"
           style={{ color: "#4F3DB5" }}
         >
           <ArrowLeft size={15} />
-          Todos os artigos
+          {t("backToAll")}
         </Link>
 
-        {/* Header */}
         <header className="mb-10">
           <div className="flex items-center gap-3 mb-4">
             <span
@@ -63,7 +69,7 @@ export default async function BlogPostPage({ params }: Props) {
             </span>
             <span className="flex items-center gap-1 text-xs text-gray-400">
               <Clock size={11} />
-              {post.readingTime} min de leitura
+              {post.readingTime} min
             </span>
           </div>
 
@@ -75,11 +81,9 @@ export default async function BlogPostPage({ params }: Props) {
           </h1>
 
           <p className="text-lg text-gray-500 leading-relaxed mb-4">{post.summary}</p>
-
-          <p className="text-sm text-gray-400">{formatDate(post.date)}</p>
+          <p className="text-sm text-gray-400">{formatDate(post.date, locale)}</p>
         </header>
 
-        {/* Cover image */}
         {post.coverImage && (
           <div className="rounded-2xl overflow-hidden mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -91,10 +95,8 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        {/* Divider */}
         {!post.coverImage && <div className="h-px bg-gray-100 mb-10" />}
 
-        {/* Content */}
         <article
           className="prose prose-gray prose-lg max-w-none
             prose-headings:font-extrabold prose-headings:text-gray-900
@@ -105,7 +107,6 @@ export default async function BlogPostPage({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
-        {/* CTA */}
         <div
           className="mt-16 rounded-2xl p-8 text-center"
           style={{ backgroundColor: "#EEEDFE" }}
@@ -114,21 +115,18 @@ export default async function BlogPostPage({ params }: Props) {
             className="text-xl font-bold text-gray-900 mb-2"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Pronto para transformar sua operação?
+            {t("postCta.title")}
           </h3>
-          <p className="text-gray-600 mb-6 text-sm">
-            Fale com a ORDO e descubra como podemos ajudar o seu negócio.
-          </p>
+          <p className="text-gray-600 mb-6 text-sm">{t("postCta.body")}</p>
           <Link
             href="/#contato"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-white text-sm font-semibold transition-opacity hover:opacity-90"
             style={{ backgroundColor: "#4F3DB5" }}
           >
-            Quero uma proposta
+            {t("postCta.button")}
           </Link>
         </div>
 
-        {/* Related posts */}
         {related.length > 0 && (
           <div className="mt-16">
             <h3

@@ -1,41 +1,48 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Clock } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { getBlogPosts } from "@/lib/blog";
 import type { BlogPost } from "@/types";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description:
-    "Artigos sobre processos, automação e IA para pequenas e médias empresas.",
-};
-
 const TAG_COLORS: Record<string, { bg: string; text: string }> = {
   Processos: { bg: "#EEEDFE", text: "#4F3DB5" },
-  Automação: { bg: "#EEEDFE", text: "#3C3489" },
-  IA:        { bg: "#EEEDFE", text: "#3C3489" },
+  "Automação": { bg: "#EEEDFE", text: "#3C3489" },
+  IA: { bg: "#EEEDFE", text: "#3C3489" },
 };
 
-const ALL_TAGS = ["Todos", "Processos", "Automação", "IA"];
+interface Props {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ tag?: string }>;
+}
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("pt-BR", {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "blog" });
+  return {
+    title: t("metaTitle"),
+    description: t("metaDescription"),
+  };
+}
+
+function formatDate(iso: string, locale: string) {
+  const localeCode = locale === "en" ? "en-US" : "pt-BR";
+  return new Date(iso).toLocaleDateString(localeCode, {
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
 }
 
-function PostCard({ post }: { post: BlogPost }) {
+function PostCard({ post, locale }: { post: BlogPost; locale: string }) {
   const tagStyle = TAG_COLORS[post.tag] ?? TAG_COLORS["Processos"];
   return (
     <Link
       href={`/blog/${post.slug}`}
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-[#AFA9EC] transition-all duration-300"
     >
-      {/* Cover image */}
       {post.coverImage ? (
         <div className="h-44 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -69,7 +76,7 @@ function PostCard({ post }: { post: BlogPost }) {
         </p>
 
         <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
-          <span>{formatDate(post.date)}</span>
+          <span>{formatDate(post.date, locale)}</span>
           <span className="flex items-center gap-1">
             <Clock size={11} />
             {post.readingTime} min
@@ -80,48 +87,46 @@ function PostCard({ post }: { post: BlogPost }) {
   );
 }
 
-interface Props {
-  searchParams: Promise<{ tag?: string }>;
-}
-
-export default async function BlogPage({ searchParams }: Props) {
+export default async function BlogPage({ params, searchParams }: Props) {
+  const { locale } = await params;
   const { tag } = await searchParams;
+  const t = await getTranslations({ locale, namespace: "blog" });
   const allPosts = await getBlogPosts();
+  const filterAll = t("filterAll");
+  const ALL_TAGS = [filterAll, "Processos", "Automação", "IA"];
   const posts =
-    !tag || tag === "Todos"
+    !tag || tag === filterAll
       ? allPosts
       : allPosts.filter((p) => p.tag === tag);
 
   return (
     <main className="min-h-screen bg-gray-50 pt-28 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-12 text-center">
           <span
             className="text-xs font-bold uppercase tracking-widest"
             style={{ color: "#4F3DB5" }}
           >
-            Conteúdo
+            {t("eyebrow")}
           </span>
           <h1
             className="mt-3 text-4xl font-extrabold text-gray-900"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            Blog ORDO
+            {t("title")}
           </h1>
-          <p className="mt-3 text-gray-500 max-w-xl mx-auto">
-            Artigos práticos sobre processos, automação e IA para PMEs.
-          </p>
+          <p className="mt-3 text-gray-500 max-w-xl mx-auto">{t("subtitle")}</p>
         </div>
 
-        {/* Category filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {ALL_TAGS.map((t) => {
-            const active = !tag ? t === "Todos" : t === tag;
+          {ALL_TAGS.map((tagLabel) => {
+            const active = !tag ? tagLabel === filterAll : tagLabel === tag;
+            const href =
+              tagLabel === filterAll ? "/blog" : (`/blog?tag=${tagLabel}` as string);
             return (
               <Link
-                key={t}
-                href={t === "Todos" ? "/blog" : `/blog?tag=${t}`}
+                key={tagLabel}
+                href={href}
                 className="text-sm font-medium px-4 py-1.5 rounded-full border-2 transition-all duration-200"
                 style={{
                   backgroundColor: active ? "#4F3DB5" : "white",
@@ -129,23 +134,20 @@ export default async function BlogPage({ searchParams }: Props) {
                   color: active ? "white" : "#6B7280",
                 }}
               >
-                {t}
+                {tagLabel}
               </Link>
             );
           })}
         </div>
 
-        {/* Posts grid */}
         {posts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
-              <PostCard key={post.slug} post={post} />
+              <PostCard key={post.slug} post={post} locale={locale} />
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-400 py-16">
-            Nenhum artigo encontrado para esta categoria.
-          </p>
+          <p className="text-center text-gray-400 py-16">{t("noResults")}</p>
         )}
       </div>
     </main>

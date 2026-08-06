@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { getSiteConfig } from "@/lib/site-config";
+import { getTranslations } from "next-intl/server";
 
 function LinkedInIcon() {
   return (
@@ -18,21 +19,22 @@ function InstagramIcon() {
   );
 }
 
-const quickLinks = [
-  { href: "#sobre", label: "Sobre a ORDO" },
-  { href: "#servicos", label: "Serviços" },
-  { href: "#metodologia", label: "Metodologia" },
-  { href: "/blog", label: "Blog" },
-  { href: "#contato", label: "Contato" },
-];
-
 export default async function Footer() {
+  const t = await getTranslations("footer");
   const cfg = await getSiteConfig();
+
+  const quickLinks = [
+    { href: "#sobre", label: t("links.about") },
+    { href: "#servicos", label: t("links.services") },
+    { href: "#metodologia", label: t("links.methodology") },
+    { href: "/blog", label: t("links.blog") },
+    { href: "#contato", label: t("links.contact") },
+  ];
+
   return (
     <footer className="text-white" style={{ backgroundColor: "#26215C" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-white/10">
-          {/* Brand */}
           <div className="md:col-span-1">
             <div className="mb-5">
               <Link href="/">
@@ -45,13 +47,11 @@ export default async function Footer() {
               </Link>
             </div>
             <p className="text-sm text-purple-200 leading-relaxed max-w-xs">
-              Processos. Automação. Inteligência.
+              {t("tagline1")}
             </p>
             <p className="text-sm text-purple-300 leading-relaxed mt-2 max-w-xs">
-              Ajudamos PMEs a crescerem com eficiência operacional real.
+              {t("tagline2")}
             </p>
-
-            {/* Social */}
             <div className="flex gap-3 mt-6">
               {cfg.linkedin && (
                 <a href={cfg.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn da ORDO" className="flex items-center justify-center w-9 h-9 rounded-lg text-purple-300 hover:text-white hover:bg-white/10 transition-colors">
@@ -66,10 +66,9 @@ export default async function Footer() {
             </div>
           </div>
 
-          {/* Quick links */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-5">
-              Navegação
+              {t("navTitle")}
             </h3>
             <ul className="space-y-2.5">
               {quickLinks.map((link) => (
@@ -85,10 +84,9 @@ export default async function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-5">
-              Contato
+              {t("contactTitle")}
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5">
@@ -111,9 +109,8 @@ export default async function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-purple-400">
-          <p>© {new Date().getFullYear()} ORDO Consultoria. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} ORDO Consultoria. {t("copyright")}</p>
           <p>{cfg.addressFull}</p>
         </div>
       </div>

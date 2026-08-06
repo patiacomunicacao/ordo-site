@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { COOKIE_NAME } from "@/lib/auth";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+
+const intlMiddleware = createMiddleware(routing);
 
 function getSecret() {
   return new TextEncoder().encode(
@@ -44,9 +48,15 @@ export async function proxy(req: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  // Skip i18n for API routes and files with extensions
+  if (pathname.startsWith("/api/") || /\.[^/]+$/.test(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Apply next-intl for all public routes
+  return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/((?!_next|_vercel).*)"],
 };
