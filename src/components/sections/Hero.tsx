@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
@@ -64,20 +64,6 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
         <div className="max-w-3xl">
-          <motion.div {...fadeUpProps(0)} className="mb-6">
-            <span
-              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border"
-              style={{
-                backgroundColor: "rgba(79,61,181,0.08)",
-                borderColor: "rgba(79,61,181,0.2)",
-                color: "#4F3DB5",
-              }}
-            >
-              <Sparkles size={12} />
-              {t("badge")}
-            </span>
-          </motion.div>
-
           <motion.h1
             {...fadeUpProps(0.1)}
             className="text-4xl sm:text-5xl md:text-[3.5rem] font-extrabold text-gray-900 leading-[1.08] tracking-tight mb-6"
