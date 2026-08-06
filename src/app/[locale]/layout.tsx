@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit, DM_Sans } from "next/font/google";
+import Script from "next/script";
 import "../globals.css";
 import PublicShell from "@/components/layout/PublicShell";
 import CookieBanner from "@/components/layout/CookieBanner";
@@ -117,6 +118,31 @@ export default async function LocaleLayout({
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
+        {GA_ID && (
+          <>
+            {/* Consent Mode v2 — bloqueia cookies até o usuário aceitar */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('consent', 'default', {
+                    analytics_storage: 'denied',
+                    ad_storage: 'denied',
+                  });
+                `,
+              }}
+            />
+            <Script
+              id="ga4-gtag"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-config" strategy="afterInteractive">
+              {`gtag('js', new Date()); gtag('config', '${GA_ID}');`}
+            </Script>
+          </>
+        )}
         <ConsentScripts clarityId={CLARITY_ID} gaId={GA_ID} />
         <CookieBanner locale={locale} />
       </body>

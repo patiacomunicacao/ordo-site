@@ -11,48 +11,34 @@ export default function ConsentScripts({
   gaId?: string;
 }) {
   useEffect(() => {
-    function loadGA4() {
-      if (!gaId || document.getElementById("ga4-script")) return;
-      window.dataLayer = window.dataLayer ?? [];
-      window.gtag = function (...args: unknown[]) {
-        window.dataLayer!.push(args);
-      };
-      window.gtag("js", new Date());
-      window.gtag("config", gaId, { anonymize_ip: true });
+    function grantAll() {
+      // Libera cookies do GA4 via Consent Mode v2
+      if (gaId && typeof window.gtag === "function") {
+        window.gtag("consent", "update", {
+          analytics_storage: "granted",
+          ad_storage: "denied", // anúncios continuam bloqueados
+        });
+      }
 
-      const s = document.createElement("script");
-      s.id = "ga4-script";
-      s.async = true;
-      s.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-      document.head.appendChild(s);
-    }
-
-    function loadClarity() {
-      if (!clarityId || document.getElementById("ms-clarity-script")) return;
-      const s = document.createElement("script");
-      s.id = "ms-clarity-script";
-      s.innerHTML = `(function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window,document,"clarity","script","${clarityId}");`;
-      document.head.appendChild(s);
-    }
-
-    if (localStorage.getItem(CONSENT_KEY) === "all") {
-      loadGA4();
-      loadClarity();
-    }
-
-    function onConsentUpdate() {
-      if (localStorage.getItem(CONSENT_KEY) === "all") {
-        loadGA4();
-        loadClarity();
+      // Carrega Clarity
+      if (clarityId && !document.getElementById("ms-clarity-script")) {
+        const s = document.createElement("script");
+        s.id = "ms-clarity-script";
+        s.innerHTML = `(function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window,document,"clarity","script","${clarityId}");`;
+        document.head.appendChild(s);
       }
     }
 
-    window.addEventListener("ordo_consent_updated", onConsentUpdate);
-    return () => window.removeEventListener("ordo_consent_updated", onConsentUpdate);
+    if (localStorage.getItem(CONSENT_KEY) === "all") {
+      grantAll();
+    }
+
+    window.addEventListener("ordo_consent_updated", grantAll);
+    return () => window.removeEventListener("ordo_consent_updated", grantAll);
   }, [clarityId, gaId]);
 
   return null;
