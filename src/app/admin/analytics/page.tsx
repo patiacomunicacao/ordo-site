@@ -71,7 +71,7 @@ function SetupStep({ n, title, description }: { n: string; title: string; descri
     <div className="flex gap-4">
       <div
         className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white mt-0.5"
-        style={{ backgroundColor: "#4F3DB5" }}
+        style={{ backgroundColor: "#5B2A86" }}
       >
         {n}
       </div>
@@ -84,7 +84,6 @@ function SetupStep({ n, title, description }: { n: string; title: string; descri
 }
 
 export default function AnalyticsPage() {
-  const clarityConfigured = true; // show setup guide regardless
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -134,7 +133,7 @@ export default function AnalyticsPage() {
           description="Visitas, visitantes únicos, páginas mais acessadas, países e dispositivos. Dados em tempo real."
           href={VERCEL_URL}
           badge="Ativo"
-          color="#4F3DB5"
+          color="#5B2A86"
           metrics={[
             "Visitas totais",
             "Visitantes únicos",
@@ -195,7 +194,7 @@ export default function AnalyticsPage() {
           <SetupStep
             n="1"
             title="Criar propriedade no GA4"
-            description={<>Acesse <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="text-[#4F3DB5] underline">analytics.google.com</a> → clique em &quot;Criar propriedade&quot; → preencha nome &quot;ORDO Site&quot; → URL: ordoautomacao.com.br → crie.</>}
+            description={<>Acesse <a href="https://analytics.google.com" target="_blank" rel="noopener noreferrer" className="text-[#5B2A86] underline">analytics.google.com</a> → clique em &quot;Criar propriedade&quot; → preencha nome &quot;ORDO Site&quot; → URL: ordoautomacao.com.br → crie.</>}
           />
           <SetupStep
             n="2"
@@ -243,7 +242,7 @@ export default function AnalyticsPage() {
             title="Criar conta no Microsoft Clarity"
             description={
               <>Acesse{" "}
-                <a href="https://clarity.microsoft.com" target="_blank" rel="noopener noreferrer" className="text-[#4F3DB5] underline">
+                <a href="https://clarity.microsoft.com" target="_blank" rel="noopener noreferrer" className="text-[#5B2A86] underline">
                   clarity.microsoft.com
                 </a>{" "}e faça login com uma conta Microsoft (pode ser Outlook ou conta criada gratuitamente).
               </>
@@ -281,8 +280,8 @@ export default function AnalyticsPage() {
       {/* Vercel Analytics activation */}
       <div className="bg-white border border-gray-100 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "#4F3DB518" }}>
-            <Globe size={16} style={{ color: "#4F3DB5" }} />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: "#5B2A8618" }}>
+            <Globe size={16} style={{ color: "#5B2A86" }} />
           </div>
           <div>
             <h2 className="text-sm font-bold text-gray-900">Ativar Vercel Analytics (se ainda não estiver ativo)</h2>
@@ -296,7 +295,7 @@ export default function AnalyticsPage() {
             title="Acessar o painel do projeto"
             description={
               <>Acesse{" "}
-                <a href="https://vercel.com/patiacomunicacao/ordo-site" target="_blank" rel="noopener noreferrer" className="text-[#4F3DB5] underline">
+                <a href="https://vercel.com/patiacomunicacao/ordo-site" target="_blank" rel="noopener noreferrer" className="text-[#5B2A86] underline">
                   vercel.com/patiacomunicacao/ordo-site
                 </a>.
               </>

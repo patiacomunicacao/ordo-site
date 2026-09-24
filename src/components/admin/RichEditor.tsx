@@ -62,7 +62,7 @@ function Btn({
       className="p-1.5 rounded transition-colors disabled:opacity-30"
       style={
         active
-          ? { backgroundColor: "#4F3DB5", color: "white" }
+          ? { backgroundColor: "#5B2A86", color: "white" }
           : { color: "#6b7280" }
       }
       onMouseEnter={(e) => {
@@ -325,7 +325,7 @@ function HtmlInsertModal({
             value={raw}
             onChange={(e) => setRaw(e.target.value)}
             placeholder="<h2>Título</h2><p>Parágrafo...</p>"
-            className="w-full h-48 px-3 py-2 border border-gray-200 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] resize-none"
+            className="w-full h-48 px-3 py-2 border border-gray-200 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-[#5B2A86] resize-none"
             autoFocus
           />
         </div>
@@ -342,7 +342,7 @@ function HtmlInsertModal({
             onClick={() => { if (raw.trim()) { onInsert(raw.trim()); onClose(); } }}
             disabled={!raw.trim()}
             className="px-4 py-2 text-sm font-semibold text-white rounded-lg disabled:opacity-50 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             Inserir
           </button>
@@ -400,8 +400,8 @@ function TableInsertModal({
                   key={i}
                   className="w-6 h-6 rounded-sm border cursor-pointer transition-colors"
                   style={{
-                    backgroundColor: active ? "#EEEDFE" : "#f9fafb",
-                    borderColor: active ? "#4F3DB5" : "#e5e7eb",
+                    backgroundColor: active ? "#F3EEF9" : "#f9fafb",
+                    borderColor: active ? "#5B2A86" : "#e5e7eb",
                   }}
                   onMouseEnter={() => setHovered({ r, c })}
                   onMouseLeave={() => setHovered(null)}
@@ -425,7 +425,7 @@ function TableInsertModal({
                 max={20}
                 value={rows}
                 onChange={(e) => setRows(Math.max(1, Math.min(20, Number(e.target.value))))}
-                className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5]"
+                className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86]"
               />
             </div>
             <div className="flex-1">
@@ -436,7 +436,7 @@ function TableInsertModal({
                 max={10}
                 value={cols}
                 onChange={(e) => setCols(Math.max(1, Math.min(10, Number(e.target.value))))}
-                className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5]"
+                className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86]"
               />
             </div>
           </div>
@@ -453,7 +453,7 @@ function TableInsertModal({
               type="button"
               onClick={() => { onInsert(rows, cols); onClose(); }}
               className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#4F3DB5" }}
+              style={{ backgroundColor: "#5B2A86" }}
             >
               Inserir
             </button>

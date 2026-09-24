@@ -11,6 +11,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { getSeo, BASE_URL } from "@/content/seo";
+import { DEFAULT_SITE_CONFIG } from "@/lib/site-config";
 
 const outfit = Outfit({
   variable: "--font-heading",
@@ -24,7 +26,7 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const BASE = "https://ordoautomacao.com.br";
+const BASE = BASE_URL;
 
 export async function generateMetadata({
   params,
@@ -32,27 +34,21 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const isEn = locale === "en";
-
-  const title = isEn
-    ? "ORDO Consultoria | Process Mapping, Automation & AI for SMBs"
-    : "ORDO Consultoria | Processos, Automação e IA para PMEs";
-  const description = isEn
-    ? "ORDO helps small and medium businesses grow efficiently through process mapping, automation, and artificial intelligence."
-    : "A ORDO ajuda pequenas e médias empresas a crescerem com eficiência por meio do mapeamento de processos, automação e inteligência artificial.";
+  const seo = getSeo(locale);
 
   return {
     metadataBase: new URL(BASE),
-    title: { default: title, template: "%s | ORDO Consultoria" },
-    description,
-    authors: [{ name: "ORDO Consultoria" }],
-    creator: "ORDO Consultoria",
+    title: { default: seo.title, template: `%s | ${seo.siteName}` },
+    description: seo.description,
+    authors: [{ name: seo.siteName }],
+    creator: seo.siteName,
     openGraph: {
       type: "website",
-      siteName: "ORDO Consultoria",
-      locale: isEn ? "en_US" : "pt_BR",
+      siteName: seo.siteName,
+      locale: locale === "en" ? "en_US" : "pt_BR",
+      images: [{ url: seo.ogImage, width: 1200, height: 630, alt: seo.ogImageAlt }],
     },
-    twitter: { card: "summary_large_image" },
+    twitter: { card: "summary_large_image", images: [seo.ogImage] },
     robots: {
       index: true,
       follow: true,
@@ -100,10 +96,20 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "ORDO Consultoria",
+              "@type": "ProfessionalService",
+              name: "ORDO Automação",
               url: BASE,
-              logo: `${BASE}/images/logo.png`,
+              logo: `${BASE}/images/logo-ordo-color.png`,
+              description: getSeo(locale).description,
+              sameAs: [DEFAULT_SITE_CONFIG.instagram],
+              areaServed: "BR",
+              knowsAbout: [
+                "Mapeamento de processos",
+                "Automação de processos",
+                "Agentes de IA",
+                "Consultoria operacional",
+                "Sistemas embarcados",
+              ],
               contactPoint: {
                 "@type": "ContactPoint",
                 contactType: "customer service",

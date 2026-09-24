@@ -1,28 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 
 export const CONSENT_KEY = "ordo_consent";
 
-export default function CookieBanner({ locale }: { locale: string }) {
-  const [visible, setVisible] = useState(false);
+function subscribeToStorage(onChange: () => void) {
+  window.addEventListener("storage", onChange);
+  return () => window.removeEventListener("storage", onChange);
+}
 
-  useEffect(() => {
-    if (!localStorage.getItem(CONSENT_KEY)) {
-      setVisible(true);
-    }
-  }, []);
+export default function CookieBanner({ locale }: { locale: string }) {
+  // No servidor (e antes da hidratação) o banner fica oculto.
+  const hasConsent = useSyncExternalStore(
+    subscribeToStorage,
+    () => !!localStorage.getItem(CONSENT_KEY),
+    () => true
+  );
+  const [dismissed, setDismissed] = useState(false);
+  const visible = !hasConsent && !dismissed;
 
   function accept() {
     localStorage.setItem(CONSENT_KEY, "all");
-    setVisible(false);
+    setDismissed(true);
     window.dispatchEvent(new Event("ordo_consent_updated"));
   }
 
   function essentialOnly() {
     localStorage.setItem(CONSENT_KEY, "essential");
-    setVisible(false);
+    setDismissed(true);
   }
 
   if (!visible) return null;
@@ -47,7 +53,7 @@ export default function CookieBanner({ locale }: { locale: string }) {
           <Link
             href={isEn ? "/en/politica-de-privacidade" : "/politica-de-privacidade"}
             className="underline underline-offset-2 hover:opacity-80 transition-opacity"
-            style={{ color: "#4F3DB5" }}
+            style={{ color: "#5B2A86" }}
           >
             {isEn ? "Privacy Policy" : "Política de Privacidade"}
           </Link>
@@ -62,7 +68,7 @@ export default function CookieBanner({ locale }: { locale: string }) {
           <button
             onClick={accept}
             className="px-4 py-2 text-sm font-semibold text-white rounded-lg transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             {isEn ? "Accept all" : "Aceitar todos"}
           </button>

@@ -1,7 +1,8 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import { motion } from "framer-motion";
+import Reveal from "@/components/brand/Reveal";
+import { Eyebrow } from "@/components/brand/GridMark";
 import { ArrowRight, Clock } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,13 +10,13 @@ import type { BlogPost } from "@/types";
 import { useTranslations, useLocale } from "next-intl";
 
 const TAG_COLORS: Record<string, { bg: string; text: string; accent: string }> = {
-  Processos: { bg: "#4F3DB5", text: "#4F3DB5", accent: "#EEEDFE" },
-  "Automação": { bg: "#AFA9EC", text: "#3C3489", accent: "#EEEDFE" },
-  IA: { bg: "#3C3489", text: "#3C3489", accent: "#EEEDFE" },
+  Processos: { bg: "#5B2A86", text: "#5B2A86", accent: "#F3EEF9" },
+  "Automação": { bg: "#C9B3E6", text: "#3E1C5E", accent: "#F3EEF9" },
+  IA: { bg: "#3E1C5E", text: "#3E1C5E", accent: "#F3EEF9" },
 };
 
 function PlaceholderImage({ tag }: { tag: string }) {
-  const color = TAG_COLORS[tag]?.bg ?? "#4F3DB5";
+  const color = TAG_COLORS[tag]?.bg ?? "#5B2A86";
   return (
     <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
       <rect width="400" height="200" fill={color} opacity="0.12" />
@@ -36,7 +37,7 @@ function BlogCard({ post, locale }: { post: BlogPost; locale: string }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-[#AFA9EC] transition-all duration-300"
+      className="group flex flex-col bg-white rounded-2xl border border-[#E4D8F2] overflow-hidden hover:shadow-lg hover:border-[#C9B3E6] transition-all duration-300"
     >
       <div className="h-44 overflow-hidden bg-gray-50">
         {post.coverImage ? (
@@ -59,18 +60,18 @@ function BlogCard({ post, locale }: { post: BlogPost; locale: string }) {
           {post.tag}
         </span>
         <h3
-          className="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-[#4F3DB5] transition-colors"
+          className="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-[#5B2A86] transition-colors"
           style={{ fontFamily: "var(--font-heading)" }}
         >
           {post.title}
         </h3>
-        <p className="text-sm text-gray-500 leading-relaxed flex-1 mb-4 line-clamp-3">
+        <p className="text-sm text-gray-600 leading-relaxed flex-1 mb-4 line-clamp-3">
           {post.summary}
         </p>
-        <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between text-xs text-gray-500 pt-4 border-t border-gray-100">
           <span>{formattedDate}</span>
           <span className="flex items-center gap-1">
-            <Clock size={11} />
+            <Clock size={11} aria-hidden="true" />
             {post.readingTime} min
           </span>
         </div>
@@ -85,22 +86,14 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
   if (posts.length === 0) return null;
 
   return (
-    <section id="blog" className="py-24 bg-white">
+    <section id="blog" aria-labelledby="blog-title" className="pt-4 pb-20 md:pb-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55 }}
-        >
+        <Reveal className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "#4F3DB5" }}>
-              {t("eyebrow")}
-            </span>
+            <Eyebrow>{t("eyebrow")}</Eyebrow>
             <h2
-              className="mt-3 text-3xl sm:text-4xl font-extrabold text-gray-900"
-              style={{ fontFamily: "var(--font-heading)" }}
+              id="blog-title"
+              className="mt-4 font-heading text-[1.75rem] sm:text-4xl font-extrabold text-gray-900"
             >
               {t("title")}
             </h2>
@@ -109,25 +102,19 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
             href="/blog"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "border-[#4F3DB5] text-[#4F3DB5] hover:bg-[#EEEDFE] flex-shrink-0 font-semibold"
+              "border-[#5B2A86] text-[#5B2A86] hover:bg-[#F3EEF9] flex-shrink-0 font-semibold"
             )}
           >
             {t("viewAll")}
             <ArrowRight size={15} className="ml-1.5" />
           </Link>
-        </motion.div>
+        </Reveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post, i) => (
-            <motion.div
-              key={post.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: i * 0.1 }}
-            >
+            <Reveal key={post.slug} delay={i * 100}>
               <BlogCard post={post} locale={locale} />
-            </motion.div>
+            </Reveal>
           ))}
         </div>
       </div>

@@ -1,131 +1,113 @@
-const CheckIcon = () => (
-  <svg viewBox="0 0 20 20" fill="none">
-    <circle cx="10" cy="10" r="9" stroke="#C4A0F0" strokeOpacity="0.4" strokeWidth="1" />
-    <path d="M6 10l3 3 5-5" stroke="#C4A0F0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+import { Check } from "lucide-react";
+import CtaLink from "@/components/brand/CtaLink";
+import { Eyebrow, GridMark } from "@/components/brand/GridMark";
+import Reveal from "@/components/brand/Reveal";
+import type { CaseContent } from "@/content/case/types";
 
-const ArrowIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-export default function CaseClickUp() {
+export default function CaseClickUp({
+  content,
+  contactHref,
+}: {
+  content: CaseContent;
+  contactHref: string;
+}) {
   return (
-    <section className="ordo-case">
-      <div className="ordo-case__inner">
+    <section aria-labelledby="case-clickup-title" className="bg-white py-16 md:py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <Reveal>
+          <Eyebrow>{content.eyebrow}</Eyebrow>
+          <h2
+            id="case-clickup-title"
+            className="mt-4 font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-gray-900 sm:text-6xl"
+          >
+            {content.titleLead}
+            <br />
+            <span className="text-[#5B2A86]">{content.titleHighlight}</span>
+          </h2>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-gray-600">{content.subtitle}</p>
+          <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#E4D8F2] bg-[#F8F5FC] px-4 py-1.5 text-sm text-gray-700">
+            <GridMark size={12} filled={1} />
+            {content.sector}
+          </p>
+        </Reveal>
 
-        <span className="ordo-case__eyebrow">Case de resultado</span>
-
-        <h2 className="ordo-case__heading">
-          198 horas.<br />
-          Feitas em <em>2 dias.</em>
-        </h2>
-
-        <p className="ordo-case__subtitle">
-          Como estruturamos mais de 1.000 tarefas no ClickUp para uma empresa de engenharia
-          ambiental usando Claude e Claude Code.
-        </p>
-
-        <div className="ordo-case__sector">
-          <span className="ordo-case__sector-dot" />
-          Engenharia Ambiental · Implementação ClickUp · IA + Automação
-        </div>
-
-        {/* Stats */}
-        <div className="ordo-case__stats">
-          {[
-            { num: "68", label: <>serviços estruturados<br />no ClickUp</> },
-            { num: "1.000+", label: <>tarefas criadas com<br />padrão uniforme</> },
-            { num: "-99%", label: <>do tempo estimado<br />para execução manual</> },
-          ].map((s) => (
-            <div key={s.num} className="ordo-case__stat">
-              <span className="ordo-case__stat-num">{s.num}</span>
-              <span className="ordo-case__stat-label">{s.label}</span>
-            </div>
+        <ul className="mt-12 grid gap-4 sm:grid-cols-3 sm:gap-6">
+          {content.stats.map((stat, i) => (
+            <Reveal as="li" key={stat.label} delay={i * 80}>
+              <div className="h-full rounded-2xl border border-[#E4D8F2] bg-white p-6 sm:p-7">
+                <p className="font-heading text-4xl font-extrabold text-[#5B2A86] sm:text-5xl">{stat.value}</p>
+                <p className="mt-2 text-sm leading-snug text-gray-600">{stat.label}</p>
+              </div>
+            </Reveal>
           ))}
+        </ul>
+
+        <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:gap-12">
+          <Reveal>
+            <h3 className="font-heading text-xl font-extrabold text-gray-900">{content.phasesTitle}</h3>
+            <ol className="mt-6 space-y-6">
+              {content.phases.map((phase, i) => (
+                <li key={phase.title} className="flex gap-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F3EEF9] font-heading text-sm font-bold text-[#5B2A86]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <p className="font-heading font-bold text-gray-900">{phase.title}</p>
+                    <p className="mt-1 text-[15px] leading-relaxed text-gray-600">{phase.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <div className="h-full rounded-3xl bg-[#F8F5FC] p-6 sm:p-8">
+              <h3 className="font-heading text-xl font-extrabold text-gray-900">{content.resultsTitle}</h3>
+              <ul className="mt-6 divide-y divide-[#E4D8F2]">
+                {content.results.map((r) => (
+                  <li key={r.strong} className="flex items-start gap-3 py-3.5 text-[15px] text-gray-700">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#5B2A86] text-white">
+                      <Check size={13} strokeWidth={3} aria-hidden="true" />
+                    </span>
+                    <span>
+                      <strong className="font-semibold text-gray-900">{r.strong}</strong> {r.rest}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
 
-        {/* Body grid */}
-        <div className="ordo-case__grid">
-          {/* Phases */}
-          <div className="ordo-case__phases">
-            <div style={{ marginBottom: 8 }}>
-              <p style={{ fontFamily: "var(--font-heading)", fontSize: 13, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(196,160,240,0.7)", marginBottom: 24 }}>
-                Como foi feito
-              </p>
-            </div>
-            {[
-              {
-                n: "01", title: "Análise estratégica com Claude",
-                text: "A documentação de processos da empresa foi carregada direto no Claude. Ele leu, interpretou e sugeriu a arquitetura ideal no ClickUp — marcos, tarefas vinculadas e hierarquias escaláveis.",
-              },
-              {
-                n: "02", title: "Criação em escala com Claude Code",
-                text: "Scripts Python gerados pelo Claude criaram pastas, listas, checklists e relacionamentos via API do ClickUp. Cada ciclo era validado, ajustado e re-executado até a entrega estar perfeita.",
-              },
-              {
-                n: "03", title: "Condução e validação humana",
-                text: "A IA foi a ferramenta. A estratégia, as decisões e o controle de qualidade foram humanos — em cada etapa do processo.",
-              },
-            ].map((p) => (
-              <div key={p.n} className="ordo-case__phase">
-                <div className="ordo-case__phase-num">{p.n}</div>
-                <div>
-                  <p className="ordo-case__phase-title">{p.title}</p>
-                  <p className="ordo-case__phase-text">{p.text}</p>
+        <Reveal className="mt-12">
+          <div className="rounded-3xl border border-[#E4D8F2] p-6 sm:p-8">
+            <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-gray-600">{content.compareTitle}</h3>
+            <dl className="mt-5 space-y-4">
+              {content.compare.map((row, i) => (
+                <div key={row.label} className="grid grid-cols-[5.5rem_1fr_4rem] items-center gap-3 sm:grid-cols-[7rem_1fr_5rem]">
+                  <dt className="text-right text-sm font-medium text-gray-600">{row.label}</dt>
+                  <dd className="h-2.5 overflow-hidden rounded-full bg-[#F3EEF9]">
+                    <span
+                      className="block h-full min-w-2.5 rounded-full"
+                      style={{
+                        width: `${row.percent}%`,
+                        backgroundColor: i === 0 ? "#C9B3E6" : "#5B2A86",
+                      }}
+                    />
+                  </dd>
+                  <dd className="font-heading text-sm font-bold text-[#3E1C5E]">{row.value}</dd>
                 </div>
-              </div>
-            ))}
+              ))}
+            </dl>
           </div>
+        </Reveal>
 
-          {/* Results */}
-          <div className="ordo-case__results">
-            <p className="ordo-case__results-title">Resultado para o cliente</p>
-            {[
-              <><strong>Operação estruturada</strong> e pronta para escalar</>,
-              <><strong>Padrão uniforme</strong> em todos os 68 serviços</>,
-              <><strong>Base preparada</strong> para automações futuras</>,
-              <><strong>Scripts reutilizáveis</strong> para novos projetos</>,
-              <><strong>Zero retrabalho</strong> na entrega final</>,
-            ].map((text, i) => (
-              <div key={i} className="ordo-case__result-item">
-                <div className="ordo-case__result-icon"><CheckIcon /></div>
-                <p className="ordo-case__result-text">{text}</p>
-              </div>
-            ))}
-          </div>
+        <div className="mt-12 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <p className="text-base text-gray-600">{content.ctaText}</p>
+          <CtaLink href={contactHref}>
+            {content.cta}
+          </CtaLink>
         </div>
-
-        {/* Comparison */}
-        <div className="ordo-case__compare">
-          <p className="ordo-case__compare-label">Tempo de execução</p>
-          <div className="ordo-case__compare-row">
-            <span className="ordo-case__compare-tag">Manual</span>
-            <div className="ordo-case__compare-bar-wrap">
-              <div className="ordo-case__compare-bar ordo-case__compare-bar--before" />
-            </div>
-            <span className="ordo-case__compare-val ordo-case__compare-val--before">~198h</span>
-          </div>
-          <div className="ordo-case__compare-row">
-            <span className="ordo-case__compare-tag">Com ORDO</span>
-            <div className="ordo-case__compare-bar-wrap">
-              <div className="ordo-case__compare-bar ordo-case__compare-bar--after" />
-            </div>
-            <span className="ordo-case__compare-val ordo-case__compare-val--after">2 dias</span>
-          </div>
-        </div>
-
-        {/* CTA */}
-        <div className="ordo-case__cta">
-          <p className="ordo-case__cta-text">Seu próximo projeto pode ser assim.</p>
-          <a href="/#contato" className="ordo-case__btn">
-            Falar com a ORDO
-            <ArrowIcon />
-          </a>
-        </div>
-
       </div>
     </section>
   );

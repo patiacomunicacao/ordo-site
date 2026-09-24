@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <span
             className="text-2xl font-extrabold"
-            style={{ fontFamily: "var(--font-heading)", color: "#4F3DB5" }}
+            style={{ fontFamily: "var(--font-heading)", color: "#5B2A86" }}
           >
             ORDO
           </span>
@@ -61,7 +61,7 @@ export default function LoginPage() {
               placeholder="••••••••"
               required
               autoFocus
-              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] focus:border-transparent"
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86] focus:border-transparent"
             />
           </div>
 
@@ -71,7 +71,7 @@ export default function LoginPage() {
             type="submit"
             disabled={loading}
             className="w-full py-2.5 rounded-lg text-white text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-60"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             {loading ? "Entrando…" : "Entrar"}
           </button>

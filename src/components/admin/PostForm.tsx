@@ -81,7 +81,7 @@ function Input({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       maxLength={maxLength}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] focus:border-transparent"
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86] focus:border-transparent"
     />
   );
 }
@@ -106,7 +106,7 @@ function Textarea({
       placeholder={placeholder}
       rows={rows}
       maxLength={maxLength}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] focus:border-transparent resize-none"
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86] focus:border-transparent resize-none"
     />
   );
 }
@@ -142,7 +142,7 @@ function PreviewModal({
       {/* Preview bar */}
       <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-2">
-          <Eye size={15} style={{ color: "#4F3DB5" }} />
+          <Eye size={15} style={{ color: "#5B2A86" }} />
           <span className="text-sm font-semibold text-gray-700">Pré-visualização</span>
           <span className="text-xs text-gray-400 hidden sm:inline">— como vai aparecer no site</span>
         </div>
@@ -160,7 +160,7 @@ function PreviewModal({
             onClick={onPublish}
             disabled={saving}
             className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             <Globe size={14} />
             {saving ? "Publicando…" : "Publicar agora"}
@@ -176,7 +176,7 @@ function PreviewModal({
             {form.tag && (
               <span
                 className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
-                style={{ backgroundColor: "#EEEDFE", color: "#4F3DB5" }}
+                style={{ backgroundColor: "#F3EEF9", color: "#5B2A86" }}
               >
                 <Tag size={10} />
                 {form.tag}
@@ -232,7 +232,7 @@ function PreviewModal({
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-gray-600 prose-p:leading-relaxed
                 prose-strong:text-gray-800
-                prose-a:text-[#4F3DB5] prose-a:no-underline hover:prose-a:underline"
+                prose-a:text-[#5B2A86] prose-a:no-underline hover:prose-a:underline"
               dangerouslySetInnerHTML={{ __html: form.content }}
             />
           ) : (
@@ -271,7 +271,7 @@ function SEOPanel({
         className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors text-sm font-semibold text-gray-700"
       >
         <span className="flex items-center gap-2">
-          <Globe size={14} style={{ color: "#4F3DB5" }} />
+          <Globe size={14} style={{ color: "#5B2A86" }} />
           SEO & Redes Sociais
         </span>
         {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -597,7 +597,7 @@ export default function PostForm({ post }: { post?: DbPost }) {
               onClick={() => handleSave("published")}
               disabled={saving}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#4F3DB5" }}
+              style={{ backgroundColor: "#5B2A86" }}
             >
               <Globe size={14} />
               {saving ? "Salvando…" : "Publicar"}
@@ -619,7 +619,7 @@ export default function PostForm({ post }: { post?: DbPost }) {
               value={form.title}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Título do post"
-              className="w-full text-2xl font-bold text-gray-900 border-0 border-b-2 border-gray-100 focus:border-[#4F3DB5] focus:outline-none py-2 bg-transparent placeholder:text-gray-300 transition-colors"
+              className="w-full text-2xl font-bold text-gray-900 border-0 border-b-2 border-gray-100 focus:border-[#5B2A86] focus:outline-none py-2 bg-transparent placeholder:text-gray-300 transition-colors"
               style={{ fontFamily: "var(--font-heading)" }}
             />
 
@@ -634,7 +634,7 @@ export default function PostForm({ post }: { post?: DbPost }) {
                   set("slug", e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""));
                 }}
                 placeholder="slug-do-post"
-                className="flex-1 text-xs text-gray-500 border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#4F3DB5] font-mono"
+                className="flex-1 text-xs text-gray-500 border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#5B2A86] font-mono"
               />
             </div>
 
@@ -739,8 +739,8 @@ export default function PostForm({ post }: { post?: DbPost }) {
                     style={
                       form.tag === t
                         ? {
-                            backgroundColor: "#4F3DB5",
-                            borderColor: "#4F3DB5",
+                            backgroundColor: "#5B2A86",
+                            borderColor: "#5B2A86",
                             color: "white",
                           }
                         : {
