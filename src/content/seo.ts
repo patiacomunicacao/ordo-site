@@ -17,7 +17,16 @@ const pt: SeoContent = {
   ogImageAlt: "ORDO Automação: sua operação organizada, automatizada e pronta para crescer.",
 };
 
-const SEO: Record<string, SeoContent> = { pt };
+const en: SeoContent = {
+  siteName: "ORDO Automação",
+  title: "ORDO Automação | Process assessment, automation and AI for businesses",
+  description:
+    "Process assessment, automation, AI agents, ongoing consulting and embedded systems for SMBs and law firms. Book your assessment.",
+  ogImage: "/api/og/en",
+  ogImageAlt: "ORDO Automação: your operation organized, automated and ready to grow.",
+};
+
+const SEO: Record<string, SeoContent> = { pt, en };
 
 export function getSeo(locale: string): SeoContent {
   return SEO[locale] ?? pt;
