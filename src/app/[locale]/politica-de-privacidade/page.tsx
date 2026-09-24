@@ -66,8 +66,8 @@ function PolicyPt() {
         </p>
         <p>
           Para dúvidas sobre esta política ou para exercer seus direitos, entre em contato pelo e-mail{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#5B2A86" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>.
         </p>
       </Section>
@@ -161,8 +161,8 @@ function PolicyPt() {
         </ul>
         <p>
           Para exercer qualquer um desses direitos, envie um e-mail para{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#5B2A86" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>{" "}
           com o assunto <strong>&ldquo;Direitos LGPD&rdquo;</strong>. Responderemos em até 15 dias úteis.
         </p>
@@ -201,8 +201,8 @@ function PolicyEn() {
         </p>
         <p>
           For questions about this policy or to exercise your rights, contact us at{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#5B2A86" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>.
         </p>
       </Section>
@@ -277,8 +277,8 @@ function PolicyEn() {
         </ul>
         <p>
           To exercise any of these rights, email{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#5B2A86" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>{" "}
           with the subject <strong>&ldquo;Privacy Rights&rdquo;</strong>. We will respond within 15 business days.
         </p>

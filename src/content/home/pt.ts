@@ -139,6 +139,7 @@ export const pt: HomeContent = {
           name: "Partner",
           summary: "Atuamos como o seu braço de operações.",
           features: [
+            "Tudo do Advanced",
             "Braço de operações da sua empresa",
             "Presença nas reuniões de gestão",
             "Atendimento prioritário",

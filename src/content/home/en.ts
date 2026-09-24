@@ -139,6 +139,7 @@ export const en: HomeContent = {
           name: "Partner",
           summary: "We act as your operations arm.",
           features: [
+            "Everything in Advanced",
             "Your company's operations arm",
             "Presence in management meetings",
             "Priority support",
