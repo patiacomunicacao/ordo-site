@@ -8,7 +8,7 @@ export const ContactSchema = z.object({
     .min(10, "Informe o telefone com DDD")
     .regex(/^[\d\s()\-+]+$/, "Formato inválido"),
   company: z.string().min(1, "Informe o nome da empresa"),
-  serviceInterest: z.string().min(1, "Selecione um serviço de interesse"),
+  serviceInterest: z.string().min(1, "Selecione uma opção"),
   message: z.string().optional(),
 });
 

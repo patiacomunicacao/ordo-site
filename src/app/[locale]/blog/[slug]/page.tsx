@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
   const related = await getRelatedPosts(slug);
 
   return (
-    <main className="min-h-screen bg-white pt-28 pb-24">
+    <main id="conteudo" className="min-h-screen bg-white pt-28 pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -102,7 +102,7 @@ export default async function BlogPostPage({ params }: Props) {
         <Link
           href="/blog"
           className="inline-flex items-center gap-1.5 text-sm font-medium mb-10 transition-colors"
-          style={{ color: "#4F3DB5" }}
+          style={{ color: "#5B2A86" }}
         >
           <ArrowLeft size={15} />
           {t("backToAll")}
@@ -112,7 +112,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="flex items-center gap-3 mb-4">
             <span
               className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
-              style={{ backgroundColor: "#EEEDFE", color: "#4F3DB5" }}
+              style={{ backgroundColor: "#F3EEF9", color: "#5B2A86" }}
             >
               <Tag size={10} />
               {post.tag}
@@ -153,13 +153,13 @@ export default async function BlogPostPage({ params }: Props) {
             prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
             prose-p:text-gray-600 prose-p:leading-relaxed
             prose-strong:text-gray-800
-            prose-a:text-[#4F3DB5] prose-a:no-underline hover:prose-a:underline"
+            prose-a:text-[#5B2A86] prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
         <div
           className="mt-16 rounded-2xl p-8 text-center"
-          style={{ backgroundColor: "#EEEDFE" }}
+          style={{ backgroundColor: "#F3EEF9" }}
         >
           <h3
             className="text-xl font-bold text-gray-900 mb-2"
@@ -171,7 +171,7 @@ export default async function BlogPostPage({ params }: Props) {
           <Link
             href="/#contato"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-white text-sm font-semibold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             {t("postCta.button")}
           </Link>
@@ -190,15 +190,15 @@ export default async function BlogPostPage({ params }: Props) {
                 <Link
                   key={r.slug}
                   href={`/blog/${r.slug}`}
-                  className="group block rounded-xl border border-gray-100 p-5 hover:border-[#AFA9EC] hover:shadow-md transition-all"
+                  className="group block rounded-xl border border-gray-100 p-5 hover:border-[#C9B3E6] hover:shadow-md transition-all"
                 >
                   <span
                     className="text-[0.65rem] font-bold uppercase tracking-wider"
-                    style={{ color: "#4F3DB5" }}
+                    style={{ color: "#5B2A86" }}
                   >
                     {r.tag}
                   </span>
-                  <p className="text-sm font-semibold text-gray-800 mt-1 group-hover:text-[#4F3DB5] transition-colors leading-snug">
+                  <p className="text-sm font-semibold text-gray-800 mt-1 group-hover:text-[#5B2A86] transition-colors leading-snug">
                     {r.title}
                   </p>
                 </Link>

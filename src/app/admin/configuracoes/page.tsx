@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, Save, Mail, Phone, MapPin, Clock, Share2 } from "lucide-react";
+import { ArrowLeft, Save, Mail, Phone, MapPin, Share2 } from "lucide-react";
 import type { SiteConfig } from "@/lib/site-config";
 
 // ─── UI helpers ───────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ function Input({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] focus:border-transparent"
+        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86] focus:border-transparent"
       />
       {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
     </div>
@@ -58,9 +58,9 @@ function SectionCard({
       <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: "#EEEDFE" }}
+          style={{ backgroundColor: "#F3EEF9" }}
         >
-          <span style={{ color: "#4F3DB5" }}>{icon}</span>
+          <span style={{ color: "#5B2A86" }}>{icon}</span>
         </div>
         <div>
           <h2 className="text-sm font-bold text-gray-900">{title}</h2>
@@ -134,7 +134,7 @@ export default function ConfiguracoesPage() {
             onClick={handleSave}
             disabled={saving}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: saved ? "#059669" : "#4F3DB5" }}
+            style={{ backgroundColor: saved ? "#059669" : "#5B2A86" }}
           >
             <Save size={14} />
             {saving ? "Salvando…" : saved ? "Salvo!" : "Salvar"}

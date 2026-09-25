@@ -8,9 +8,9 @@ import type { BlogPost } from "@/types";
 export const revalidate = 300;
 
 const TAG_COLORS: Record<string, { bg: string; text: string }> = {
-  Processos: { bg: "#EEEDFE", text: "#4F3DB5" },
-  "Automação": { bg: "#EEEDFE", text: "#3C3489" },
-  IA: { bg: "#EEEDFE", text: "#3C3489" },
+  Processos: { bg: "#F3EEF9", text: "#5B2A86" },
+  "Automação": { bg: "#F3EEF9", text: "#3E1C5E" },
+  IA: { bg: "#F3EEF9", text: "#3E1C5E" },
 };
 
 interface Props {
@@ -58,7 +58,7 @@ function PostCard({ post, locale }: { post: BlogPost; locale: string }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-[#AFA9EC] transition-all duration-300"
+      className="group flex flex-col bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-[#C9B3E6] transition-all duration-300"
     >
       {post.coverImage ? (
         <div className="h-44 overflow-hidden">
@@ -70,7 +70,7 @@ function PostCard({ post, locale }: { post: BlogPost; locale: string }) {
           />
         </div>
       ) : (
-        <div className="h-44" style={{ backgroundColor: "#EEEDFE", opacity: 0.8 }} />
+        <div className="h-44" style={{ backgroundColor: "#F3EEF9", opacity: 0.8 }} />
       )}
 
       <div className="flex flex-col flex-1 p-6">
@@ -82,7 +82,7 @@ function PostCard({ post, locale }: { post: BlogPost; locale: string }) {
         </span>
 
         <h2
-          className="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-[#4F3DB5] transition-colors"
+          className="text-base font-bold text-gray-900 leading-snug mb-2 group-hover:text-[#5B2A86] transition-colors"
           style={{ fontFamily: "var(--font-heading)" }}
         >
           {post.title}
@@ -117,12 +117,12 @@ export default async function BlogPage({ params, searchParams }: Props) {
       : allPosts.filter((p) => p.tag === tag);
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-28 pb-24">
+    <main id="conteudo" className="min-h-screen bg-gray-50 pt-28 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <span
             className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: "#4F3DB5" }}
+            style={{ color: "#5B2A86" }}
           >
             {t("eyebrow")}
           </span>
@@ -146,8 +146,8 @@ export default async function BlogPage({ params, searchParams }: Props) {
                 href={href}
                 className="text-sm font-medium px-4 py-1.5 rounded-full border-2 transition-all duration-200"
                 style={{
-                  backgroundColor: active ? "#4F3DB5" : "white",
-                  borderColor: active ? "#4F3DB5" : "#E5E7EB",
+                  backgroundColor: active ? "#5B2A86" : "white",
+                  borderColor: active ? "#5B2A86" : "#E5E7EB",
                   color: active ? "white" : "#6B7280",
                 }}
               >

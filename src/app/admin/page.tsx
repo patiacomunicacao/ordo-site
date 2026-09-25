@@ -112,7 +112,7 @@ export default function AdminDashboard() {
           <Link
             href="/admin/posts/new"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             <Plus size={15} />
             Novo post
@@ -129,7 +129,7 @@ export default function AdminDashboard() {
           <Link
             href="/admin/posts/new"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold"
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             <Plus size={15} />
             Criar primeiro post
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
                     {post.tag ? (
                       <span
                         className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: "#EEEDFE", color: "#4F3DB5" }}
+                        style={{ backgroundColor: "#F3EEF9", color: "#5B2A86" }}
                       >
                         {post.tag}
                       </span>

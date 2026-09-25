@@ -154,7 +154,7 @@ function LeadRow({
             <button
               onClick={handleResend}
               disabled={resending}
-              className="p-1.5 text-gray-400 hover:text-[#4F3DB5] rounded transition-colors disabled:opacity-40"
+              className="p-1.5 text-gray-400 hover:text-[#5B2A86] rounded transition-colors disabled:opacity-40"
               title="Reenviar ao webhook"
             >
               <RefreshCw size={15} className={resending ? "animate-spin" : ""} />
@@ -191,7 +191,7 @@ function LeadRow({
                     }`}
                     style={
                       msg.role === "user"
-                        ? { backgroundColor: "#4F3DB5" }
+                        ? { backgroundColor: "#5B2A86" }
                         : undefined
                     }
                   >
@@ -303,7 +303,7 @@ export default function LeadsPage() {
               onClick={() => setFilter(t)}
               className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
                 active
-                  ? "border-[#4F3DB5] bg-[#EEEDFE] text-[#4F3DB5]"
+                  ? "border-[#5B2A86] bg-[#F3EEF9] text-[#5B2A86]"
                   : "border-gray-200 text-gray-500 hover:bg-gray-50"
               }`}
             >

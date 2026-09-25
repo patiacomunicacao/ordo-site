@@ -86,7 +86,7 @@ export default function ImageUpload({
           }}
           onMouseEnter={(e) => {
             if (!error && !loading)
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "#4F3DB5";
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "#5B2A86";
           }}
           onMouseLeave={(e) => {
             if (!error)
@@ -95,8 +95,8 @@ export default function ImageUpload({
         >
           {loading ? (
             <>
-              <Loader2 size={20} className="animate-spin" style={{ color: "#4F3DB5" }} />
-              <span className="text-xs" style={{ color: "#4F3DB5" }}>Enviando…</span>
+              <Loader2 size={20} className="animate-spin" style={{ color: "#5B2A86" }} />
+              <span className="text-xs" style={{ color: "#5B2A86" }}>Enviando…</span>
             </>
           ) : (
             <>

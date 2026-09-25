@@ -16,7 +16,7 @@ function OrdoLogo({ className, white = false }: { className?: string; white?: bo
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={white ? "/images/logo-ordo-branco.png" : "/images/logo-ordo-color.png"}
-        alt="ORDO Consultoria"
+        alt="ORDO Automação"
         className="h-[70px] w-auto"
       />
     </Link>
@@ -32,9 +32,8 @@ export default function Navbar() {
   const isHome = pathname === "/";
 
   const NAV_SECTIONS = [
-    { anchor: "sobre", label: t("about") },
     { anchor: "servicos", label: t("services") },
-    { anchor: "metodologia", label: t("methodology") },
+    { anchor: "como-trabalhamos", label: t("howWeWork") },
     { anchor: "contato", label: t("contact") },
   ];
 
@@ -44,7 +43,12 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => { setIsOpen(false); }, [nextPathname]);
+  // Fecha o menu móvel ao trocar de página.
+  const [lastPathname, setLastPathname] = useState(nextPathname);
+  if (lastPathname !== nextPathname) {
+    setLastPathname(nextPathname);
+    setIsOpen(false);
+  }
 
   function sectionHref(anchor: string) {
     return isHome ? `#${anchor}` : `/#${anchor}`;
@@ -64,12 +68,12 @@ export default function Navbar() {
           <OrdoLogo />
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-7">
+          <nav aria-label={t("mainNav")} className="hidden md:flex items-center gap-7">
             {NAV_SECTIONS.map((s) => (
               <a
                 key={s.anchor}
                 href={sectionHref(s.anchor)}
-                className="text-sm font-medium text-gray-600 hover:text-[#4F3DB5] transition-colors duration-150"
+                className="text-sm font-medium text-gray-600 hover:text-[#5B2A86] transition-colors duration-150"
               >
                 {s.label}
               </a>
@@ -79,8 +83,8 @@ export default function Navbar() {
               className={cn(
                 "text-sm font-medium transition-colors duration-150",
                 pathname.startsWith("/casos")
-                  ? "text-[#4F3DB5] font-semibold"
-                  : "text-gray-600 hover:text-[#4F3DB5]"
+                  ? "text-[#5B2A86] font-semibold"
+                  : "text-gray-600 hover:text-[#5B2A86]"
               )}
             >
               {t("cases")}
@@ -90,8 +94,8 @@ export default function Navbar() {
               className={cn(
                 "text-sm font-medium transition-colors duration-150",
                 pathname.startsWith("/blog")
-                  ? "text-[#4F3DB5] font-semibold"
-                  : "text-gray-600 hover:text-[#4F3DB5]"
+                  ? "text-[#5B2A86] font-semibold"
+                  : "text-gray-600 hover:text-[#5B2A86]"
               )}
             >
               {t("blog")}
@@ -102,11 +106,12 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <a
             href={sectionHref("contato")}
+            data-service="diagnostico"
             className={cn(
               buttonVariants(),
               "hidden md:inline-flex text-white text-sm font-semibold px-5"
             )}
-            style={{ backgroundColor: "#4F3DB5" }}
+            style={{ backgroundColor: "#5B2A86" }}
           >
             {t("cta")}
           </a>
@@ -114,7 +119,7 @@ export default function Navbar() {
           {/* Mobile Sheet */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-[#4F3DB5] transition-colors"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-[#5B2A86] transition-colors"
               aria-label={t("openMenu")}
             >
               <Menu size={22} />
@@ -124,12 +129,12 @@ export default function Navbar() {
               <div className="flex flex-col flex-1 px-6 pt-8 pb-6">
                 <OrdoLogo className="mb-8" />
 
-                <nav className="flex flex-col gap-0">
+                <nav aria-label={t("mainNav")} className="flex flex-col gap-0">
                   {NAV_SECTIONS.map((s) => (
                     <a
                       key={s.anchor}
                       href={sectionHref(s.anchor)}
-                      className="text-sm font-medium text-gray-700 hover:text-[#4F3DB5] transition-colors py-3.5 border-b border-gray-100"
+                      className="text-sm font-medium text-gray-700 hover:text-[#5B2A86] transition-colors py-3.5 border-b border-gray-100"
                       onClick={() => setIsOpen(false)}
                     >
                       {s.label}
@@ -140,8 +145,8 @@ export default function Navbar() {
                     className={cn(
                       "text-sm font-medium py-3.5 border-b border-gray-100 transition-colors",
                       pathname.startsWith("/casos")
-                        ? "text-[#4F3DB5] font-semibold"
-                        : "text-gray-700 hover:text-[#4F3DB5]"
+                        ? "text-[#5B2A86] font-semibold"
+                        : "text-gray-700 hover:text-[#5B2A86]"
                     )}
                     onClick={() => setIsOpen(false)}
                   >
@@ -152,8 +157,8 @@ export default function Navbar() {
                     className={cn(
                       "text-sm font-medium py-3.5 border-b border-gray-100 transition-colors",
                       pathname.startsWith("/blog")
-                        ? "text-[#4F3DB5] font-semibold"
-                        : "text-gray-700 hover:text-[#4F3DB5]"
+                        ? "text-[#5B2A86] font-semibold"
+                        : "text-gray-700 hover:text-[#5B2A86]"
                     )}
                     onClick={() => setIsOpen(false)}
                   >
@@ -167,12 +172,13 @@ export default function Navbar() {
 
                 <a
                   href={sectionHref("contato")}
+                  data-service="diagnostico"
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     buttonVariants(),
                     "mt-2 text-white font-semibold w-full justify-center"
                   )}
-                  style={{ backgroundColor: "#4F3DB5" }}
+                  style={{ backgroundColor: "#5B2A86" }}
                 >
                   {t("cta")}
                 </a>

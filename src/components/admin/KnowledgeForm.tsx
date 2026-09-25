@@ -44,7 +44,7 @@ function Input({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] focus:border-transparent"
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86] focus:border-transparent"
     />
   );
 }
@@ -66,7 +66,7 @@ function Textarea({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#4F3DB5] focus:border-transparent resize-none"
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#5B2A86] focus:border-transparent resize-none"
     />
   );
 }
@@ -87,9 +87,9 @@ function SectionCard({
       <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
         <div
           className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: "#EEEDFE" }}
+          style={{ backgroundColor: "#F3EEF9" }}
         >
-          <span style={{ color: "#4F3DB5" }}>{icon}</span>
+          <span style={{ color: "#5B2A86" }}>{icon}</span>
         </div>
         <div>
           <h2 className="text-sm font-bold text-gray-900">{title}</h2>
@@ -179,7 +179,7 @@ function ServiceEditor({
       <button
         type="button"
         onClick={add}
-        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#4F3DB5] hover:text-[#4F3DB5] transition-colors flex items-center justify-center gap-2"
+        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#5B2A86] hover:text-[#5B2A86] transition-colors flex items-center justify-center gap-2"
       >
         <Plus size={14} />
         Adicionar serviço
@@ -245,7 +245,7 @@ function FaqEditor({
       <button
         type="button"
         onClick={add}
-        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#4F3DB5] hover:text-[#4F3DB5] transition-colors flex items-center justify-center gap-2"
+        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#5B2A86] hover:text-[#5B2A86] transition-colors flex items-center justify-center gap-2"
       >
         <Plus size={14} />
         Adicionar pergunta
@@ -297,7 +297,7 @@ function WebhookEditor({
                 onClick={() => update(w.id, { enabled: !w.enabled })}
                 title={w.enabled ? "Desativar" : "Ativar"}
                 className={`relative flex-shrink-0 w-9 h-5 rounded-full transition-colors ${
-                  w.enabled ? "bg-[#4F3DB5]" : "bg-gray-300"
+                  w.enabled ? "bg-[#5B2A86]" : "bg-gray-300"
                 }`}
               >
                 <span
@@ -345,7 +345,7 @@ function WebhookEditor({
       <button
         type="button"
         onClick={add}
-        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#4F3DB5] hover:text-[#4F3DB5] transition-colors flex items-center justify-center gap-2"
+        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-[#5B2A86] hover:text-[#5B2A86] transition-colors flex items-center justify-center gap-2"
       >
         <Plus size={14} />
         Adicionar webhook
@@ -368,7 +368,7 @@ function PromptPreview({ prompt }: { prompt: string }) {
         type="button"
         onClick={() => setShow((v) => !v)}
         className="inline-flex items-center gap-2 text-sm font-medium transition-colors"
-        style={{ color: "#4F3DB5" }}
+        style={{ color: "#5B2A86" }}
       >
         {show ? <EyeOff size={15} /> : <Eye size={15} />}
         {show ? "Ocultar prompt gerado" : "Visualizar prompt gerado"}
@@ -474,7 +474,7 @@ export default function KnowledgeForm() {
             onClick={handleSave}
             disabled={saving}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: saved ? "#059669" : "#4F3DB5" }}
+            style={{ backgroundColor: saved ? "#059669" : "#5B2A86" }}
           >
             <Save size={14} />
             {saving ? "Salvando…" : saved ? "Salvo!" : "Salvar alterações"}

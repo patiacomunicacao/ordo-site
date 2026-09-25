@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { ContactSchema } from "@/lib/validations";
+import { pt } from "@/content/home/pt";
 
 export const runtime = "nodejs";
 
-const SERVICE_LABELS: Record<string, string> = {
-  mapeamento: "Mapeamento de Processos",
-  automacao: "Automação de Processos",
-  ia: "Implementação de IA",
-  gestao: "Gestão de Projetos",
-  treinamento: "Treinamento e Capacitação",
-  transformacao: "Transformação Digital",
-};
+const SERVICE_LABELS: Record<string, string> = Object.fromEntries(
+  pt.contact.serviceOptions.map((o) => [o.value, o.label])
+);
 
 function buildTransporter() {
   const user = process.env.GMAIL_USER;
@@ -49,7 +45,7 @@ function buildHtml(data: {
 
           <!-- Header -->
           <tr>
-            <td style="background:#4F3DB5;padding:24px 32px;">
+            <td style="background:#5B2A86;padding:24px 32px;">
               <p style="margin:0;font-size:20px;font-weight:700;color:#ffffff;letter-spacing:.5px;">
                 ORDO Consultoria
               </p>
@@ -64,7 +60,7 @@ function buildHtml(data: {
             <td style="padding:28px 32px;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 ${row("Nome", data.name)}
-                ${row("E-mail", `<a href="mailto:${data.email}" style="color:#4F3DB5;">${data.email}</a>`)}
+                ${row("E-mail", `<a href="mailto:${data.email}" style="color:#5B2A86;">${data.email}</a>`)}
                 ${row("Telefone", data.phone)}
                 ${row("Empresa", data.company)}
                 ${row("Serviço de interesse", serviceLabel)}
@@ -73,7 +69,7 @@ function buildHtml(data: {
                     ? `<tr>
                         <td colspan="2" style="padding:14px 0 0;">
                           <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;">Mensagem</p>
-                          <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;background:#f9fafb;padding:12px 14px;border-radius:8px;border-left:3px solid #4F3DB5;">
+                          <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;background:#f9fafb;padding:12px 14px;border-radius:8px;border-left:3px solid #5B2A86;">
                             ${data.message.replace(/\n/g, "<br />")}
                           </p>
                         </td>

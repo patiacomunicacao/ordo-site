@@ -1,15 +1,5 @@
 export type { ChatMessage } from "./chat";
 
-export interface Service {
-  id: string;
-  icon: string;        // nome do ícone lucide-react (ex: "GitBranch")
-  title: string;
-  description: string;
-  priceFrom: number;   // em reais
-  slug: string;
-  bullets?: string[];
-}
-
 export interface BlogPost {
   id?: string;
   slug: string;
@@ -26,19 +16,4 @@ export interface BlogPost {
   seoDescription?: string;
   ogImage?: string;
   author?: string;
-}
-
-export interface Testimonial {
-  name: string;
-  role: string;
-  company: string;
-  text: string;
-  initials: string;
-}
-
-export interface MethodologyStep {
-  number: string;      // "01", "02"…
-  icon: string;        // nome do ícone lucide-react
-  title: string;
-  description: string;
 }

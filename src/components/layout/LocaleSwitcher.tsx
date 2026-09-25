@@ -23,7 +23,7 @@ export default function LocaleSwitcher() {
         disabled={isPending}
         className="px-1.5 py-0.5 rounded transition-colors disabled:opacity-50"
         style={{
-          color: locale === "pt" ? "#4F3DB5" : "#9ca3af",
+          color: locale === "pt" ? "#5B2A86" : "#9ca3af",
           fontWeight: locale === "pt" ? 700 : 400,
         }}
       >
@@ -35,7 +35,7 @@ export default function LocaleSwitcher() {
         disabled={isPending}
         className="px-1.5 py-0.5 rounded transition-colors disabled:opacity-50"
         style={{
-          color: locale === "en" ? "#4F3DB5" : "#9ca3af",
+          color: locale === "en" ? "#5B2A86" : "#9ca3af",
           fontWeight: locale === "en" ? 700 : 400,
         }}
       >

@@ -21,7 +21,7 @@ export default async function PrivacyPolicyPage({ params }: Props) {
   const isEn = locale === "en";
 
   return (
-    <main className="min-h-screen bg-white pt-28 pb-24">
+    <main id="conteudo" className="min-h-screen bg-white pt-28 pb-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {isEn ? <PolicyEn /> : <PolicyPt />}
       </div>
@@ -47,7 +47,7 @@ function PolicyPt() {
   return (
     <>
       <header className="mb-12">
-        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#4F3DB5" }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#5B2A86" }}>
           Transparência e Privacidade
         </p>
         <h1
@@ -66,8 +66,8 @@ function PolicyPt() {
         </p>
         <p>
           Para dúvidas sobre esta política ou para exercer seus direitos, entre em contato pelo e-mail{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#4F3DB5" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>.
         </p>
       </Section>
@@ -161,10 +161,10 @@ function PolicyPt() {
         </ul>
         <p>
           Para exercer qualquer um desses direitos, envie um e-mail para{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#4F3DB5" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>{" "}
-          com o assunto <strong>"Direitos LGPD"</strong>. Responderemos em até 15 dias úteis.
+          com o assunto <strong>&ldquo;Direitos LGPD&rdquo;</strong>. Responderemos em até 15 dias úteis.
         </p>
       </Section>
 
@@ -182,7 +182,7 @@ function PolicyEn() {
   return (
     <>
       <header className="mb-12">
-        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#4F3DB5" }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#5B2A86" }}>
           Transparency & Privacy
         </p>
         <h1
@@ -201,8 +201,8 @@ function PolicyEn() {
         </p>
         <p>
           For questions about this policy or to exercise your rights, contact us at{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#4F3DB5" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>.
         </p>
       </Section>
@@ -277,10 +277,10 @@ function PolicyEn() {
         </ul>
         <p>
           To exercise any of these rights, email{" "}
-          <a href="mailto:contato@ordoautomacao.com.br" className="underline" style={{ color: "#4F3DB5" }}>
-            contato@ordoautomacao.com.br
+          <a href="mailto:ordooperacional@gmail.com" className="underline" style={{ color: "#5B2A86" }}>
+            ordooperacional@gmail.com
           </a>{" "}
-          with the subject <strong>"Privacy Rights"</strong>. We will respond within 15 business days.
+          with the subject <strong>&ldquo;Privacy Rights&rdquo;</strong>. We will respond within 15 business days.
         </p>
       </Section>
 

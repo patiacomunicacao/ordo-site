@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import Footer from "@/components/layout/Footer";
 import CaseClickUp from "@/components/cases/CaseClickUp";
+import { Eyebrow } from "@/components/brand/GridMark";
+import { getCaseContent } from "@/content/case";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -37,25 +40,26 @@ export default async function CasosPage({ params }: Props) {
   const t = await getTranslations({ locale, namespace: "cases" });
 
   return (
-    <main className="min-h-screen pt-20">
-      <div className="bg-white pt-14 pb-16 text-center border-b border-gray-100">
-        <span
-          className="text-xs font-bold uppercase tracking-widest"
-          style={{ color: "#4F3DB5" }}
-        >
-          {t("eyebrow")}
-        </span>
-        <h1
-          className="mt-3 text-4xl font-extrabold text-gray-900"
-          style={{ fontFamily: "var(--font-heading)" }}
-        >
-          {t("title")}
-        </h1>
-        <p className="mt-3 text-gray-500 max-w-lg mx-auto text-sm leading-relaxed">
-          {t("subtitle")}
-        </p>
+    <>
+    <main id="conteudo" className="min-h-screen pt-20">
+      <div className="relative overflow-hidden bg-[#F8F5FC] px-4 pb-14 pt-14 text-center">
+        <div className="bg-grid-2x2 pointer-events-none absolute inset-0" aria-hidden="true" />
+        <div className="relative">
+          <Eyebrow>{t("eyebrow")}</Eyebrow>
+          <h1 className="mt-4 font-heading text-4xl font-extrabold text-gray-900 sm:text-5xl">
+            {t("title")}
+          </h1>
+          <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-gray-600">
+            {t("subtitle")}
+          </p>
+        </div>
       </div>
-      <CaseClickUp />
+      <CaseClickUp
+        content={getCaseContent(locale)}
+        contactHref={locale === "en" ? "/en#contato" : "/#contato"}
+      />
     </main>
+    <Footer />
+    </>
   );
 }

@@ -46,7 +46,7 @@ function MessageBubble({ msg }: { msg: ChatMessage }) {
             ? "text-white rounded-br-sm"
             : "text-gray-700 bg-white shadow-sm rounded-bl-sm"
         }`}
-        style={isUser ? { backgroundColor: "#4F3DB5" } : undefined}
+        style={isUser ? { backgroundColor: "#5B2A86" } : undefined}
       >
         {msg.content}
       </div>
@@ -88,7 +88,7 @@ function ChatWindow({
       {/* Header */}
       <div
         className="px-4 py-3 flex items-center justify-between flex-shrink-0"
-        style={{ backgroundColor: "#4F3DB5" }}
+        style={{ backgroundColor: "#5B2A86" }}
       >
         <div className="flex items-center gap-2.5">
           {/* Avatar */}
@@ -146,7 +146,7 @@ function ChatWindow({
           disabled={isLoading || !input.trim()}
           size="sm"
           className="text-white flex-shrink-0 px-3"
-          style={{ backgroundColor: "#4F3DB5" }}
+          style={{ backgroundColor: "#5B2A86" }}
           aria-label="Enviar mensagem"
         >
           <Send size={15} />
@@ -232,7 +232,7 @@ export default function ChatWidget() {
           id: crypto.randomUUID(),
           role: "assistant",
           content:
-            "Ocorreu um erro ao processar sua mensagem. Tente novamente ou entre em contato pelo e-mail contato@ordoautomacao.com.br.",
+            "Ocorreu um erro ao processar sua mensagem. Tente novamente ou entre em contato pelo e-mail ordooperacional@gmail.com.",
           createdAt: new Date(),
         },
       ]);
@@ -263,7 +263,7 @@ export default function ChatWidget() {
       <motion.button
         onClick={() => setIsOpen((v) => !v)}
         className="relative w-14 h-14 rounded-full text-white shadow-xl flex items-center justify-center"
-        style={{ backgroundColor: "#4F3DB5" }}
+        style={{ backgroundColor: "#5B2A86" }}
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.94 }}
         aria-label={isOpen ? "Fechar chat" : "Abrir chat com ORDO IA"}
@@ -273,11 +273,11 @@ export default function ChatWidget() {
           <span className="absolute -top-1 -right-1 flex items-center justify-center">
             <span
               className="absolute w-4 h-4 rounded-full animate-ping opacity-75"
-              style={{ backgroundColor: "#AFA9EC" }}
+              style={{ backgroundColor: "#C9B3E6" }}
             />
             <span
               className="relative w-3 h-3 rounded-full"
-              style={{ backgroundColor: "#AFA9EC" }}
+              style={{ backgroundColor: "#C9B3E6" }}
             />
           </span>
         )}

@@ -25,7 +25,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   addressFull: "São José dos Pinhais · Curitiba e região",
   businessHours: "Seg–Sex, 9h às 18h",
   linkedin: "https://linkedin.com/company/ordo-consultoria",
-  instagram: "https://instagram.com/ordoconsultoria",
+  instagram: "https://www.instagram.com/ordo_automacao/",
 };
 
 // ─── Schema ───────────────────────────────────────────────────────────────────
@@ -53,10 +53,17 @@ async function ensureSchema() {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
+const LEGACY_INSTAGRAM = /instagram\.com\/ordoconsultoria\/?$/i;
+
 export async function getSiteConfig(): Promise<SiteConfig> {
   await ensureSchema();
   const rows = await sql`SELECT data FROM site_config WHERE id = 1`;
-  return (rows[0]?.data as SiteConfig) ?? DEFAULT_SITE_CONFIG;
+  const cfg = (rows[0]?.data as SiteConfig) ?? DEFAULT_SITE_CONFIG;
+  // O perfil oficial é @ordo_automacao; ignora o endereço antigo salvo no banco.
+  if (!cfg.instagram || LEGACY_INSTAGRAM.test(cfg.instagram)) {
+    return { ...cfg, instagram: DEFAULT_SITE_CONFIG.instagram };
+  }
+  return cfg;
 }
 
 export async function saveSiteConfig(config: SiteConfig): Promise<void> {
