@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Mail } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { ChatMessage } from "@/types";
@@ -15,6 +15,26 @@ const WELCOME_MESSAGE: ChatMessage = {
     "Olá! Sou o assistente da ORDO. Posso ajudar a identificar qual serviço faz mais sentido para a sua empresa ou agendar uma conversa com nossa equipe. Como posso te ajudar?",
   createdAt: new Date(),
 };
+
+const FALLBACK_TEXT =
+  "Nosso assistente está indisponível no momento, mas a equipe da ORDO pode te atender agora mesmo pelo WhatsApp.";
+
+type Contact = { whatsapp: string; email: string };
+
+function whatsappHref(whatsapp: string, question: string): string {
+  const intro = "Olá! Vim pelo chat do site da ORDO.";
+  const text = question ? `${intro} Minha dúvida: ${question.slice(0, 500)}` : intro;
+  return `https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`;
+}
+
+// ─── WhatsApp icon (lucide não tem o logo) ───────────────────────────────────
+function WhatsAppIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 21.5h-.01a9.45 9.45 0 0 1-4.82-1.32l-.35-.21-3.58.94.96-3.49-.23-.36a9.43 9.43 0 0 1-1.45-5.03c0-5.22 4.25-9.46 9.48-9.46 2.53 0 4.91.99 6.7 2.78a9.4 9.4 0 0 1 2.77 6.7c0 5.22-4.25 9.46-9.47 9.46zm8.06-17.52A11.33 11.33 0 0 0 12.04.63C5.76.63.65 5.73.65 12.01c0 2.01.52 3.97 1.52 5.69L.55 23.37l5.8-1.52a11.36 11.36 0 0 0 5.69 1.45h.01c6.28 0 11.39-5.1 11.39-11.38 0-3.04-1.18-5.9-3.34-8.05z" />
+    </svg>
+  );
+}
 
 // ─── Typing indicator ────────────────────────────────────────────────────────
 function TypingIndicator() {
@@ -36,7 +56,42 @@ function TypingIndicator() {
 }
 
 // ─── Message bubble ───────────────────────────────────────────────────────────
-function MessageBubble({ msg }: { msg: ChatMessage }) {
+function FallbackBubble({ href, email }: { href: string; email: string }) {
+  return (
+    <div className="flex justify-start">
+      <div className="max-w-[88%] rounded-2xl rounded-bl-sm px-4 py-3 text-sm leading-relaxed text-gray-700 bg-white shadow-sm">
+        <p>{FALLBACK_TEXT}</p>
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() =>
+            trackEvent("contact_whatsapp", { method: "chat_fallback", page_location: window.location.href })
+          }
+          className="mt-3 flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          style={{ backgroundColor: "#25D366" }}
+        >
+          <WhatsAppIcon />
+          Falar no WhatsApp
+        </a>
+        {email && (
+          <a
+            href={`mailto:${email}`}
+            className="mt-2 flex items-center justify-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 transition-colors"
+          >
+            <Mail size={12} />
+            ou envie um e-mail para {email}
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function MessageBubble({ msg, contact, question }: { msg: ChatMessage; contact: Contact; question: string }) {
+  if (msg.fallback && contact.whatsapp) {
+    return <FallbackBubble href={whatsappHref(contact.whatsapp, question)} email={contact.email} />;
+  }
   const isUser = msg.role === "user";
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
@@ -64,7 +119,9 @@ function ChatWindow({
   onClose,
   inputRef,
   messagesEndRef,
+  contact,
 }: {
+  contact: Contact;
   messages: ChatMessage[];
   isLoading: boolean;
   input: string;
@@ -117,8 +174,13 @@ function ChatWindow({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50">
-        {messages.map((msg) => (
-          <MessageBubble key={msg.id} msg={msg} />
+        {messages.map((msg, i) => (
+          <MessageBubble
+            key={msg.id}
+            msg={msg}
+            contact={contact}
+            question={lastUserMessage(messages.slice(0, i))}
+          />
         ))}
         {isLoading && <TypingIndicator />}
         <div ref={messagesEndRef} />
@@ -156,8 +218,15 @@ function ChatWindow({
   );
 }
 
+function lastUserMessage(messages: ChatMessage[]): string {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === "user") return messages[i].content;
+  }
+  return "";
+}
+
 // ─── Main widget ──────────────────────────────────────────────────────────────
-export default function ChatWidget() {
+export default function ChatWidget({ whatsapp, email }: Contact) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
   const [input, setInput] = useState("");
@@ -201,13 +270,17 @@ export default function ChatWidget() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: history.map((m) => ({ role: m.role, content: m.content })),
+          // Mensagens de contingência não fazem parte da conversa com a IA.
+          messages: history
+            .filter((m) => !m.fallback)
+            .map((m) => ({ role: m.role, content: m.content })),
         }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
       const data = (await res.json()) as { content?: string; error?: string; leadCaptured?: boolean };
+      if (!data.content) throw new Error(data.error ?? "Resposta vazia");
 
       if (data.leadCaptured) {
         trackEvent("generate_lead", { method: "chat", page_location: window.location.href });
@@ -218,28 +291,28 @@ export default function ChatWidget() {
         {
           id: crypto.randomUUID(),
           role: "assistant",
-          content:
-            data.content ??
-            data.error ??
-            "Não consegui processar sua mensagem. Tente novamente.",
+          content: data.content!,
           createdAt: new Date(),
         },
       ]);
     } catch {
+      // IA indisponível (sem créditos, fora do ar, rede): oferece o WhatsApp.
       setMessages((prev) => [
         ...prev,
         {
           id: crypto.randomUUID(),
           role: "assistant",
-          content:
-            "Ocorreu um erro ao processar sua mensagem. Tente novamente ou entre em contato pelo e-mail ordooperacional@gmail.com.",
+          content: whatsapp
+            ? FALLBACK_TEXT
+            : `Nosso assistente está indisponível no momento. Fale com a equipe pelo e-mail ${email}.`,
           createdAt: new Date(),
+          fallback: true,
         },
       ]);
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages]);
+  }, [input, isLoading, messages, whatsapp, email]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
@@ -255,6 +328,7 @@ export default function ChatWidget() {
             onClose={() => setIsOpen(false)}
             inputRef={inputRef}
             messagesEndRef={messagesEndRef}
+            contact={{ whatsapp, email }}
           />
         )}
       </AnimatePresence>

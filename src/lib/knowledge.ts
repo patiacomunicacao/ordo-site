@@ -1,4 +1,5 @@
 import { sql } from "@/lib/neon";
+import type { SiteConfig } from "@/lib/site-config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -6,7 +7,6 @@ export interface KbService {
   id: string;
   name: string;
   description: string;
-  startingPrice: string;   // ex: "R$ 2.500"
   highlights: string;      // principais benefícios (texto livre)
 }
 
@@ -28,8 +28,7 @@ export interface KnowledgeBase {
     name: string;
     description: string;
     location: string;
-    whatsapp: string;
-    email: string;
+    // E-mail e WhatsApp vêm de site_config (Configurações), fonte única do contato.
   };
   services: KbService[];
   faqs: KbFaq[];
@@ -52,59 +51,35 @@ const DEFAULT_KB: KnowledgeBase = {
     description:
       "empresa especializada em mapeamento de processos, automação e IA para PMEs",
     location: "Curitiba / São José dos Pinhais, PR",
-    whatsapp: "(41) 99999-0000",
-    email: "ordooperacional@gmail.com",
   },
   services: [
     {
       id: "1",
-      name: "Mapeamento de Processos",
+      name: "Diagnóstico",
       description:
-        "Identificamos gargalos e oportunidades na operação atual da empresa.",
-      startingPrice: "R$ 2.500",
-      highlights: "Diagnóstico rápido, relatório executivo, priorização de melhorias",
+        "Mapeamos processos, desenhamos como funcionam hoje (AS IS) e como deveriam funcionar (TO BE), com plano de ação. Versões Simples (1 processo) e Completo (até 3 processos, com POPs e SOPs).",
+      highlights: "Entender antes de investir, plano de ação claro, documentação para a equipe",
     },
     {
       id: "2",
-      name: "Automação de Processos",
+      name: "Implementação e Automação",
       description:
-        "Automatizamos tarefas repetitivas para liberar a equipe para o que importa.",
-      startingPrice: "R$ 4.000",
-      highlights:
-        "Integrações entre sistemas, eliminação de retrabalho, ganho de produtividade",
+        "Implantamos o novo processo com a equipe e automatizamos tarefas operacionais. Versões Implementação de Processos, Automação Starter (1 processo) e Automação PRO (até 5 processos).",
+      highlights: "Integração com as ferramentas que a empresa já usa, menos retrabalho, horas liberadas",
     },
     {
       id: "3",
-      name: "Implementação de IA",
+      name: "Inteligência Artificial",
       description:
-        "Aplicamos inteligência artificial em pontos estratégicos do negócio.",
-      startingPrice: "R$ 6.000",
-      highlights: "Chatbots, análise de dados, predição, automação inteligente",
+        "Agentes de IA que atendem clientes e executam tarefas no WhatsApp e nos sistemas, e sistemas de IA sob medida para consultar dados e documentos.",
+      highlights: "IA baseada no conhecimento da empresa, atendimento e tarefas automatizados",
     },
     {
       id: "4",
-      name: "Gestão de Projetos",
+      name: "Consultoria recorrente",
       description:
-        "Acompanhamos projetos de ponta a ponta com metodologia ágil.",
-      startingPrice: "R$ 3.000",
-      highlights: "Cronograma realista, gestão de riscos, comunicação clara",
-    },
-    {
-      id: "5",
-      name: "Treinamento e Capacitação",
-      description:
-        "Capacitamos equipes para operar as novas soluções com autonomia.",
-      startingPrice: "R$ 1.800",
-      highlights: "Treinamentos práticos, material didático, suporte pós-treinamento",
-    },
-    {
-      id: "6",
-      name: "Transformação Digital",
-      description:
-        "Programa completo de modernização da operação da empresa.",
-      startingPrice: "R$ 15.000",
-      highlights:
-        "Diagnóstico, roadmap, implementação e acompanhamento de resultados",
+        "A ORDO acompanha a operação mensalmente, com planos Essential, Advanced e Partner conforme a profundidade de atuação.",
+      highlights: "Acompanhamento contínuo, melhoria de processos, direcionamento mensal",
     },
   ],
   faqs: [
@@ -130,7 +105,7 @@ const DEFAULT_KB: KnowledgeBase = {
   behavior: {
     tone: "cordial, direto e profissional",
     mainGoal:
-      "Entender os desafios do visitante, identificar o serviço mais adequado e encorajar o agendamento de uma conversa gratuita com a equipe.",
+      "Entender os desafios do visitante, identificar o serviço mais adequado e encorajar o agendamento de um diagnóstico com a equipe.",
     restrictions:
       "Nunca inventar dados, cases ou informações não fornecidas. Não fazer promessas de resultados específicos sem conhecer o contexto do cliente.",
     customInstructions: "",
@@ -194,14 +169,16 @@ export async function saveKnowledgeBase(kb: KnowledgeBase): Promise<void> {
 
 // ─── Prompt builder ───────────────────────────────────────────────────────────
 
-export function buildSystemPrompt(kb: KnowledgeBase): string {
+type PromptInput = Pick<KnowledgeBase, "company" | "services" | "faqs" | "behavior">;
+type PromptContact = Pick<SiteConfig, "email" | "phone" | "whatsapp">;
+
+export function buildSystemPrompt(kb: PromptInput, contact: PromptContact): string {
   const servicesBlock = kb.services
     .filter((s) => s.name.trim())
     .map((s) => {
-      const price = s.startingPrice ? ` (a partir de ${s.startingPrice})` : "";
       const desc = s.description ? `\n  → ${s.description}` : "";
       const hl = s.highlights ? `\n  Destaques: ${s.highlights}` : "";
-      return `• ${s.name}${price}${desc}${hl}`;
+      return `• ${s.name}${desc}${hl}`;
     })
     .join("\n");
 
@@ -216,6 +193,10 @@ export function buildSystemPrompt(kb: KnowledgeBase): string {
 
   const restrictionsLine = kb.behavior.restrictions
     ? `- ${kb.behavior.restrictions}`
+    : "";
+
+  const whatsappLine = contact.whatsapp
+    ? ` ou WhatsApp ${contact.phone || contact.whatsapp} (https://wa.me/${contact.whatsapp})`
     : "";
 
   const customBlock = kb.behavior.customInstructions
@@ -234,7 +215,8 @@ Regras de comportamento:
 - Use sempre português brasileiro.
 - Respostas curtas — no máximo 3 parágrafos.
 ${restrictionsLine}
-- Para contato humano: ${kb.company.email}${kb.company.whatsapp ? ` ou WhatsApp ${kb.company.whatsapp}` : ""}.${customBlock}
+- Nunca informe preços, valores, faixas de investimento ou estimativas de custo. Se perguntarem, explique que o investimento depende do escopo e é definido depois do diagnóstico, e convide para agendar um.
+- Para contato humano: ${contact.email}${whatsappLine}.${customBlock}
 
 Coleta de contato (IMPORTANTE):
 - Quando o visitante demonstrar interesse genuíno em algum serviço ou solução, peça de forma natural o nome e pelo menos um contato (telefone ou e-mail) para que a equipe possa entrar em contato.

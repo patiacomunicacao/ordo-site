@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildSystemPrompt } from "@/lib/knowledge";
-import type { KnowledgeBase } from "@/lib/knowledge";
+import { getSiteConfig } from "@/lib/site-config";
+import { parseBody } from "@/lib/admin-api";
+import { KnowledgePromptSchema } from "@/lib/validations";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const kb = (await req.json()) as KnowledgeBase;
-  return NextResponse.json({ prompt: buildSystemPrompt(kb) });
+  const { data, error } = await parseBody(req, KnowledgePromptSchema);
+  if (error) return error;
+
+  return NextResponse.json({ prompt: buildSystemPrompt(data, await getSiteConfig()) });
 }
