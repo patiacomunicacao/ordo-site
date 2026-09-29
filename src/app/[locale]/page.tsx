@@ -75,7 +75,7 @@ export default async function Home({
         <ContactForm siteConfig={siteConfig} content={content.contact} />
       </main>
       <Footer />
-      <ChatWidget />
+      <ChatWidget whatsapp={siteConfig.whatsapp} email={siteConfig.email} />
     </>
   );
 }
