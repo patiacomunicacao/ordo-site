@@ -386,6 +386,8 @@ function AutoSaveIndicator({ status, savedAt }: { status: AutoSaveStatus; savedA
 
 export default function PostForm({ post }: { post?: DbPost }) {
   const isEdit = !!post;
+  // Published posts are live on the site, so edits go out only via an explicit "Atualizar"
+  const autoSaveEnabled = post?.status !== "published";
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -432,13 +434,15 @@ export default function PostForm({ post }: { post?: DbPost }) {
 
     setAutoSaveStatus("saving");
     try {
-      const payload = {
+      const id = savedPostId.current;
+      // New posts are created as drafts; updates omit status so the stored one is kept
+      const payload: Omit<Partial<FormState>, "publishedAt"> & { publishedAt: string | null } = {
         ...currentForm,
-        status: "draft" as const, // auto-save always saves as draft
         publishedAt: currentForm.publishedAt || null,
       };
+      if (id) delete payload.status;
+      else payload.status = "draft";
 
-      const id = savedPostId.current;
       const url = id ? `/api/admin/posts/${id}` : "/api/admin/posts";
       const method = id ? "PUT" : "POST";
 
@@ -468,6 +472,7 @@ export default function PostForm({ post }: { post?: DbPost }) {
       return;
     }
     setAutoSaveStatus("pending");
+    if (!autoSaveEnabled) return;
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
     autoSaveTimer.current = setTimeout(() => {
       void performAutoSave(form);
@@ -600,7 +605,7 @@ export default function PostForm({ post }: { post?: DbPost }) {
               style={{ backgroundColor: "#5B2A86" }}
             >
               <Globe size={14} />
-              {saving ? "Salvando…" : "Publicar"}
+              {saving ? "Salvando…" : autoSaveEnabled ? "Publicar" : "Atualizar"}
             </button>
           </div>
         </div>
