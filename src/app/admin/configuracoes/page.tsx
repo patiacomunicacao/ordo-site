@@ -78,6 +78,7 @@ export default function ConfiguracoesPage() {
   const [config, setConfig] = useState<SiteConfig | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   const fetchConfig = useCallback(async () => {
     const res = await fetch("/api/admin/site-config");
@@ -90,14 +91,22 @@ export default function ConfiguracoesPage() {
     if (!config) return;
     setSaving(true);
     setSaved(false);
+    setSaveError("");
     try {
-      await fetch("/api/admin/site-config", {
+      const res = await fetch("/api/admin/site-config", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(config),
       });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setSaveError(data.error ?? "Erro ao salvar.");
+        return;
+      }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
+    } catch {
+      setSaveError("Erro de conexão.");
     } finally {
       setSaving(false);
     }
@@ -130,15 +139,18 @@ export default function ConfiguracoesPage() {
               <p className="text-xs text-gray-400">Contato, redes sociais e informações gerais</p>
             </div>
           </div>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: saved ? "#059669" : "#5B2A86" }}
-          >
-            <Save size={14} />
-            {saving ? "Salvando…" : saved ? "Salvo!" : "Salvar"}
-          </button>
+          <div className="flex items-center gap-3">
+            {saveError && <p className="text-xs text-red-600 text-right max-w-xs">{saveError}</p>}
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
+              style={{ backgroundColor: saved ? "#059669" : "#5B2A86" }}
+            >
+              <Save size={14} />
+              {saving ? "Salvando…" : saved ? "Salvo!" : "Salvar"}
+            </button>
+          </div>
         </div>
       </header>
 

@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
 import { ChatSchema } from "@/lib/validations";
 import { getKnowledgeBase, buildSystemPrompt } from "@/lib/knowledge";
+import { getSiteConfig } from "@/lib/site-config";
 import { saveLead, sendLeadToAllWebhooks, type Lead } from "@/lib/leads";
 import { getEnv } from "@/lib/env";
 
@@ -111,8 +112,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const kb = await getKnowledgeBase();
-  const systemPrompt = buildSystemPrompt(kb);
+  const [kb, siteConfig] = await Promise.all([getKnowledgeBase(), getSiteConfig()]);
+  const systemPrompt = buildSystemPrompt(kb, siteConfig);
   const anthropic = new Anthropic({ apiKey });
 
   // Strip leading assistant messages (API requires user first)

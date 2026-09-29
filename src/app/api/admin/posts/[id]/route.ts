@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { getPostById, updatePost, deletePost } from "@/lib/db";
-import type { DbPost } from "@/lib/db";
+import { parseBody, isUniqueViolation } from "@/lib/admin-api";
+import { PostUpdateSchema } from "@/lib/validations";
 
 export const runtime = "nodejs";
 
@@ -16,8 +17,21 @@ export async function GET(_req: NextRequest, { params }: Ctx): Promise<NextRespo
 
 export async function PUT(req: NextRequest, { params }: Ctx): Promise<NextResponse> {
   const { id } = await params;
-  const data = (await req.json()) as Partial<Omit<DbPost, "id" | "createdAt">>;
-  const post = await updatePost(id, data);
+  const { data, error } = await parseBody(req, PostUpdateSchema);
+  if (error) return error;
+
+  let post;
+  try {
+    post = await updatePost(id, data);
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      return NextResponse.json(
+        { error: "Já existe um post com este slug. Escolha outro." },
+        { status: 409 }
+      );
+    }
+    throw err;
+  }
   if (!post) return NextResponse.json({ error: "Não encontrado" }, { status: 404 });
   revalidatePath("/");
   revalidatePath("/blog");

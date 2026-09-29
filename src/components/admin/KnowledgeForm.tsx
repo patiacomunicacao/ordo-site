@@ -119,7 +119,7 @@ function ServiceEditor({
   function add() {
     onChange([
       ...services,
-      { id: crypto.randomUUID(), name: "", description: "", startingPrice: "", highlights: "" },
+      { id: crypto.randomUUID(), name: "", description: "", highlights: "" },
     ]);
   }
 
@@ -140,23 +140,13 @@ function ServiceEditor({
               <Trash2 size={14} />
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <Label>Nome do serviço</Label>
-              <Input
-                value={s.name}
-                onChange={(v) => update(s.id, "name", v)}
-                placeholder="Ex: Automação de Processos"
-              />
-            </div>
-            <div>
-              <Label>Preço inicial</Label>
-              <Input
-                value={s.startingPrice}
-                onChange={(v) => update(s.id, "startingPrice", v)}
-                placeholder="Ex: R$ 4.000"
-              />
-            </div>
+          <div>
+            <Label>Nome do serviço</Label>
+            <Input
+              value={s.name}
+              onChange={(v) => update(s.id, "name", v)}
+              placeholder="Ex: Automação de Processos"
+            />
           </div>
           <div>
             <Label>Descrição curta</Label>
@@ -388,6 +378,7 @@ export default function KnowledgeForm() {
   const [kb, setKb] = useState<KnowledgeBase | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [preview, setPreview] = useState("");
 
   const fetchKb = useCallback(async () => {
@@ -408,7 +399,10 @@ export default function KnowledgeForm() {
       body: JSON.stringify(kb),
     })
       .then((r) => r.json())
-      .then((d: { prompt: string }) => setPreview(d.prompt))
+      .then((d: { prompt?: string }) => {
+        // Com dados inválidos a API responde 422 sem prompt: mantém o último preview.
+        if (typeof d.prompt === "string") setPreview(d.prompt);
+      })
       .catch(() => null);
   }, [kb]);
 
@@ -416,14 +410,22 @@ export default function KnowledgeForm() {
     if (!kb) return;
     setSaving(true);
     setSaved(false);
+    setSaveError("");
     try {
-      await fetch("/api/admin/knowledge", {
+      const res = await fetch("/api/admin/knowledge", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(kb),
       });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        setSaveError(data.error ?? "Erro ao salvar.");
+        return;
+      }
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
+    } catch {
+      setSaveError("Erro de conexão.");
     } finally {
       setSaving(false);
     }
@@ -469,16 +471,19 @@ export default function KnowledgeForm() {
               <p className="text-xs text-gray-400">Configurações do assistente de chat</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={saving}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
-            style={{ backgroundColor: saved ? "#059669" : "#5B2A86" }}
-          >
-            <Save size={14} />
-            {saving ? "Salvando…" : saved ? "Salvo!" : "Salvar alterações"}
-          </button>
+          <div className="flex items-center gap-3">
+            {saveError && <p className="text-xs text-red-600 text-right max-w-xs">{saveError}</p>}
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={saving}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold disabled:opacity-60 transition-opacity hover:opacity-90"
+              style={{ backgroundColor: saved ? "#059669" : "#5B2A86" }}
+            >
+              <Save size={14} />
+              {saving ? "Salvando…" : saved ? "Salvo!" : "Salvar alterações"}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -516,23 +521,13 @@ export default function KnowledgeForm() {
                 rows={2}
               />
             </div>
-            <div>
-              <Label>E-mail de contato</Label>
-              <Input
-                value={kb.company.email}
-                onChange={(v) => setCompany("email", v)}
-                placeholder="contato@empresa.com.br"
-                type="email"
-              />
-            </div>
-            <div>
-              <Label>WhatsApp</Label>
-              <Input
-                value={kb.company.whatsapp}
-                onChange={(v) => setCompany("whatsapp", v)}
-                placeholder="(41) 99999-0000"
-              />
-            </div>
+            <p className="sm:col-span-2 text-xs text-gray-500">
+              E-mail e WhatsApp que a IA informa vêm de{" "}
+              <Link href="/admin/configuracoes" className="underline hover:text-gray-800">
+                Configurações
+              </Link>
+              , os mesmos exibidos no site.
+            </p>
           </div>
         </SectionCard>
 
