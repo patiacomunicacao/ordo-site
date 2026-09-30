@@ -160,3 +160,16 @@ export const KnowledgeBaseSchema = KbPromptSchema.extend({
 export function firstIssueMessage(error: z.ZodError): string {
   return error.issues[0]?.message ?? "Dados inválidos";
 }
+
+export const LeadUpdateSchema = z
+  .object({
+    status: z.enum(
+      ["new", "contacted", "meeting", "proposal", "won", "lost"],
+      "Status do lead inválido"
+    ),
+    notes: text("Anotações", 10_000),
+  })
+  .partial()
+  .refine((d) => d.status !== undefined || d.notes !== undefined, {
+    message: "Nada para atualizar",
+  });

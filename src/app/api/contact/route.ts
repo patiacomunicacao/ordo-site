@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { ContactSchema } from "@/lib/validations";
 import { pt } from "@/content/home/pt";
+import { saveAndDispatchLead } from "@/lib/leads";
 
 export const runtime = "nodejs";
 
@@ -128,6 +129,33 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const { name, email, phone, company, serviceInterest, message } = result.data;
   const serviceLabel = SERVICE_LABELS[serviceInterest] ?? serviceInterest;
 
+  // 1) Registra o lead no admin (e envia aos webhooks). Se o banco falhar,
+  //    o e-mail abaixo ainda garante que o contato não se perde.
+  let savedToDb = false;
+  try {
+    await saveAndDispatchLead({
+      id: crypto.randomUUID(),
+      source: "form",
+      status: "new",
+      notes: "",
+      name,
+      email,
+      phone,
+      company,
+      summary: message?.trim() ?? "",
+      // Quem preenche o formulário pediu contato ativamente.
+      temperature: "hot",
+      serviceInterest: serviceLabel,
+      messages: [],
+      createdAt: new Date().toISOString(),
+      webhookSent: false,
+    });
+    savedToDb = true;
+  } catch (err) {
+    console.error("[ORDO] Erro ao salvar lead do formulário:", err);
+  }
+
+  // 2) Notifica a equipe por e-mail.
   const transporter = buildTransporter();
 
   if (!transporter) {
@@ -159,6 +187,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
   } catch (err) {
     console.error("[ORDO] Erro ao enviar e-mail:", err);
+    // Lead já registrado no admin: não pedir que o visitante reenvie (duplicaria).
+    if (savedToDb) return NextResponse.json({ success: true });
     // Não expõe detalhes do erro para o cliente
     return NextResponse.json(
       { error: "Não foi possível enviar sua mensagem. Tente novamente ou entre em contato pelo WhatsApp." },

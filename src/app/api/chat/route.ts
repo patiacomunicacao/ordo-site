@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ChatSchema } from "@/lib/validations";
 import { getKnowledgeBase, buildSystemPrompt } from "@/lib/knowledge";
 import { getSiteConfig } from "@/lib/site-config";
-import { saveLead, sendLeadToAllWebhooks, type Lead } from "@/lib/leads";
+import { saveAndDispatchLead, type Lead } from "@/lib/leads";
 import { getEnv } from "@/lib/env";
 
 export const runtime = "nodejs";
@@ -159,6 +159,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const analysis = await analyzeConversation(anthropic, messages);
     const lead: Lead = {
       id: crypto.randomUUID(),
+      source: "chat",
+      status: "new",
+      notes: "",
       name: input.name,
       phone: input.phone,
       email: input.email,
@@ -169,18 +172,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       createdAt: new Date().toISOString(),
       webhookSent: false,
     };
-    await saveLead(lead);
-
-    // Send to all active webhooks
-    const webhooks = kb.integrations?.webhooks ?? [];
-    if (webhooks.length > 0) {
-      const sent = await sendLeadToAllWebhooks(lead, webhooks);
-      if (sent) {
-        lead.webhookSent = true;
-        lead.webhookSentAt = new Date().toISOString();
-        await saveLead(lead);
-      }
-    }
+    await saveAndDispatchLead(lead);
 
     // Continue conversation with tool result
     let finalResponse: Anthropic.Message;
